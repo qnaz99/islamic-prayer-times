@@ -109,7 +109,7 @@ interface AladhanResponse {
     };
 }
 
-declare function PrayerTimes({ layout, latitude, longitude, className, }: PrayerTimesProps): react_jsx_runtime.JSX.Element;
+declare const PrayerTimes: ({ layout, latitude, longitude, className, }: PrayerTimesProps) => react_jsx_runtime.JSX.Element;
 
 declare const Alert: React$1.ForwardRefExoticComponent<React$1.HTMLAttributes<HTMLDivElement> & VariantProps<(props?: ({
     variant?: "default" | "destructive" | null | undefined;
