@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import React, { useEffect, useState } from "react";
 
 // Constants and types
 const calculationMethods = [
@@ -65,17 +65,19 @@ function Skeleton({
       className={cn("animate-pulse rounded-md bg-primary/10", className)}
       {...props}
     />
-  )
+  );
 }
 
 const PrayerTimesSkeleton = ({ minimized = false }) => (
   <div className="space-y-4 p-5">
     <Skeleton className="h-8 w-[150px]" />
-    
-    <div className={cn(
-      "grid gap-4",
-      minimized ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3"
-    )}>
+
+    <div
+      className={cn(
+        "grid gap-4",
+        minimized ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3"
+      )}
+    >
       {[...Array(6)].map((_, index) => (
         <div key={index} className="space-y-2">
           <Skeleton className="h-6 w-[100px] mx-auto" />

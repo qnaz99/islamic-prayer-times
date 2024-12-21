@@ -55,6 +55,13 @@ __export(index_exports, {
 });
 module.exports = __toCommonJS(index_exports);
 
+// lib/utils.ts
+var import_clsx = require("clsx");
+var import_tailwind_merge = require("tailwind-merge");
+function cn(...inputs) {
+  return (0, import_tailwind_merge.twMerge)((0, import_clsx.clsx)(inputs));
+}
+
 // src/components/prayer-times.tsx
 var import_react = require("react");
 var import_jsx_runtime = require("react/jsx-runtime");
@@ -65,13 +72,48 @@ var calculationMethods = [
   { label: "Muslim World League", value: 3 },
   { label: "Umm Al-Qura University, Makkah", value: 4 },
   { label: "Egyptian General Authority", value: 5 },
-  { label: "Institute of Geophysics, Tehran", value: 7 }
+  { label: "Institute of Geophysics, Tehran", value: 7 },
+  { label: "Gulf Region", value: 8 },
+  { label: "Kuwait", value: 9 },
+  { label: "Qatar", value: 10 },
+  { label: "Majlis Ugama Islam Singapura", value: 11 },
+  { label: "Union Organization Islamic de France", value: 12 },
+  { label: "Diyanet \u0130\u015Fleri Ba\u015Fkanl\u0131\u011F\u0131", value: 13 }
   // TODO: add other methods as needed
 ];
 var schools = [
   { label: "Shafi", value: 0 },
   { label: "Hanafi", value: 1 }
 ];
+function Skeleton(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    "div",
+    __spreadValues({
+      className: cn("animate-pulse rounded-md bg-primary/10", className)
+    }, props)
+  );
+}
+var PrayerTimesSkeleton = ({ minimized = false }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "space-y-4 p-5", children: [
+  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "h-8 w-[150px]" }),
+  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    "div",
+    {
+      className: cn(
+        "grid gap-4",
+        minimized ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3"
+      ),
+      children: [...Array(6)].map((_, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "space-y-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "h-6 w-[100px] mx-auto" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "h-7 w-[80px] mx-auto" })
+      ] }, index))
+    }
+  )
+] });
 var PrayerTimesDisplay = ({
   layout = "horizontal",
   latitude,
@@ -236,7 +278,7 @@ var PrayerTimesDisplay = ({
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     width: minimized ? "300px" : "100%"
   }, styles.container);
-  if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Loading prayer times..." });
+  if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PrayerTimesSkeleton, { minimized });
   if (error) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: error });
   if (!prayerData) return null;
   const prayerTimes = [
@@ -278,13 +320,6 @@ var PrayerTimesDisplay = ({
     )
   ] });
 };
-
-// lib/utils.ts
-var import_clsx = require("clsx");
-var import_tailwind_merge = require("tailwind-merge");
-function cn(...inputs) {
-  return (0, import_tailwind_merge.twMerge)((0, import_clsx.clsx)(inputs));
-}
 
 // node_modules/lucide-react/dist/esm/createLucideIcon.js
 var import_react3 = require("react");
