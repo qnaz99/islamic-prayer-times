@@ -28,7 +28,7 @@ var __objRest = (source, exclude) => {
 };
 
 // src/components/ui/alert.tsx
-import * as React2 from "react";
+import * as React from "react";
 import { cva } from "class-variance-authority";
 
 // lib/utils.ts
@@ -39,6 +39,7 @@ function cn(...inputs) {
 }
 
 // src/components/ui/alert.tsx
+import { jsx } from "react/jsx-runtime";
 var alertVariants = cva(
   "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
   {
@@ -53,9 +54,9 @@ var alertVariants = cva(
     }
   }
 );
-var Alert = React2.forwardRef((_a, ref) => {
+var Alert = React.forwardRef((_a, ref) => {
   var _b = _a, { className, variant } = _b, props = __objRest(_b, ["className", "variant"]);
-  return /* @__PURE__ */ React2.createElement(
+  return /* @__PURE__ */ jsx(
     "div",
     __spreadValues({
       ref,
@@ -65,9 +66,9 @@ var Alert = React2.forwardRef((_a, ref) => {
   );
 });
 Alert.displayName = "Alert";
-var AlertTitle = React2.forwardRef((_a, ref) => {
+var AlertTitle = React.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ React2.createElement(
+  return /* @__PURE__ */ jsx(
     "h5",
     __spreadValues({
       ref,
@@ -76,9 +77,9 @@ var AlertTitle = React2.forwardRef((_a, ref) => {
   );
 });
 AlertTitle.displayName = "AlertTitle";
-var AlertDescription = React2.forwardRef((_a, ref) => {
+var AlertDescription = React.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ React2.createElement(
+  return /* @__PURE__ */ jsx(
     "div",
     __spreadValues({
       ref,
@@ -89,10 +90,11 @@ var AlertDescription = React2.forwardRef((_a, ref) => {
 AlertDescription.displayName = "AlertDescription";
 
 // src/components/ui/card.tsx
-import * as React3 from "react";
-var Card = React3.forwardRef((_a, ref) => {
+import * as React2 from "react";
+import { jsx as jsx2 } from "react/jsx-runtime";
+var Card = React2.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ React3.createElement(
+  return /* @__PURE__ */ jsx2(
     "div",
     __spreadValues({
       ref,
@@ -104,9 +106,9 @@ var Card = React3.forwardRef((_a, ref) => {
   );
 });
 Card.displayName = "Card";
-var CardHeader = React3.forwardRef((_a, ref) => {
+var CardHeader = React2.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ React3.createElement(
+  return /* @__PURE__ */ jsx2(
     "div",
     __spreadValues({
       ref,
@@ -115,9 +117,9 @@ var CardHeader = React3.forwardRef((_a, ref) => {
   );
 });
 CardHeader.displayName = "CardHeader";
-var CardTitle = React3.forwardRef((_a, ref) => {
+var CardTitle = React2.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ React3.createElement(
+  return /* @__PURE__ */ jsx2(
     "div",
     __spreadValues({
       ref,
@@ -126,9 +128,9 @@ var CardTitle = React3.forwardRef((_a, ref) => {
   );
 });
 CardTitle.displayName = "CardTitle";
-var CardDescription = React3.forwardRef((_a, ref) => {
+var CardDescription = React2.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ React3.createElement(
+  return /* @__PURE__ */ jsx2(
     "div",
     __spreadValues({
       ref,
@@ -137,14 +139,14 @@ var CardDescription = React3.forwardRef((_a, ref) => {
   );
 });
 CardDescription.displayName = "CardDescription";
-var CardContent = React3.forwardRef((_a, ref) => {
+var CardContent = React2.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ React3.createElement("div", __spreadValues({ ref, className: cn("p-6 pt-0", className) }, props));
+  return /* @__PURE__ */ jsx2("div", __spreadValues({ ref, className: cn("p-6 pt-0", className) }, props));
 });
 CardContent.displayName = "CardContent";
-var CardFooter = React3.forwardRef((_a, ref) => {
+var CardFooter = React2.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ React3.createElement(
+  return /* @__PURE__ */ jsx2(
     "div",
     __spreadValues({
       ref,
@@ -155,13 +157,14 @@ var CardFooter = React3.forwardRef((_a, ref) => {
 CardFooter.displayName = "CardFooter";
 
 // src/components/ui/skeleton.tsx
+import { jsx as jsx3 } from "react/jsx-runtime";
 function Skeleton(_a) {
   var _b = _a, {
     className
   } = _b, props = __objRest(_b, [
     "className"
   ]);
-  return /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ jsx3(
     "div",
     __spreadValues({
       className: cn("animate-pulse rounded-md bg-primary/10", className)
@@ -214,6 +217,7 @@ function usePrayerTimes(latitude, longitude) {
 // src/components/prayer-times.tsx
 import { AlertCircle, Clock } from "lucide-react";
 import { useEffect as useEffect2, useState as useState2 } from "react";
+import { jsx as jsx4, jsxs } from "react/jsx-runtime";
 function PrayerTimes({
   layout = "horizontal",
   latitude,
@@ -229,38 +233,74 @@ function PrayerTimes({
     return () => clearInterval(timer);
   }, []);
   if (error) {
-    return /* @__PURE__ */ React.createElement(Alert, { variant: "destructive" }, /* @__PURE__ */ React.createElement(AlertCircle, { className: "h-4 w-4" }), /* @__PURE__ */ React.createElement(AlertDescription, null, error));
+    return /* @__PURE__ */ jsxs(Alert, { variant: "destructive", children: [
+      /* @__PURE__ */ jsx4(AlertCircle, { className: "h-4 w-4" }),
+      /* @__PURE__ */ jsx4(AlertDescription, { children: error })
+    ] });
   }
   if (layout === "horizontal") {
-    return /* @__PURE__ */ React.createElement(Card, { className: cn("w-full", className) }, /* @__PURE__ */ React.createElement(CardHeader, null, /* @__PURE__ */ React.createElement(CardTitle, { className: "flex items-center justify-between" }, /* @__PURE__ */ React.createElement("span", null, "Prayer Times"), /* @__PURE__ */ React.createElement("div", { className: "flex items-center text-sm font-normal" }, /* @__PURE__ */ React.createElement(Clock, { className: "mr-2 h-4 w-4" }), currentTime.toLocaleTimeString()))), /* @__PURE__ */ React.createElement(CardContent, null, /* @__PURE__ */ React.createElement("div", { className: "grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5" }, isLoading ? Array(5).fill(0).map((_, i) => /* @__PURE__ */ React.createElement(
-      "div",
-      {
-        key: i,
-        className: "flex flex-col items-center space-y-2"
-      },
-      /* @__PURE__ */ React.createElement(Skeleton, { className: "h-8 w-8 rounded-full" }),
-      /* @__PURE__ */ React.createElement(Skeleton, { className: "h-4 w-20" }),
-      /* @__PURE__ */ React.createElement(Skeleton, { className: "h-4 w-16" })
-    )) : prayerTimes.map((prayer) => /* @__PURE__ */ React.createElement(
-      "div",
-      {
-        key: prayer.name,
-        className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4"
-      },
-      /* @__PURE__ */ React.createElement(prayer.icon, { className: "h-8 w-8" }),
-      /* @__PURE__ */ React.createElement("span", { className: "font-medium" }, prayer.name),
-      /* @__PURE__ */ React.createElement("span", { className: "text-sm text-muted-foreground" }, prayer.time)
-    )))));
+    return /* @__PURE__ */ jsxs(Card, { className: cn("w-full", className), children: [
+      /* @__PURE__ */ jsx4(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center justify-between", children: [
+        /* @__PURE__ */ jsx4("span", { children: "Prayer Times" }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center text-sm font-normal", children: [
+          /* @__PURE__ */ jsx4(Clock, { className: "mr-2 h-4 w-4" }),
+          currentTime.toLocaleTimeString()
+        ] })
+      ] }) }),
+      /* @__PURE__ */ jsx4(CardContent, { children: /* @__PURE__ */ jsx4("div", { className: "grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5", children: isLoading ? Array(5).fill(0).map((_, i) => /* @__PURE__ */ jsxs(
+        "div",
+        {
+          className: "flex flex-col items-center space-y-2",
+          children: [
+            /* @__PURE__ */ jsx4(Skeleton, { className: "h-8 w-8 rounded-full" }),
+            /* @__PURE__ */ jsx4(Skeleton, { className: "h-4 w-20" }),
+            /* @__PURE__ */ jsx4(Skeleton, { className: "h-4 w-16" })
+          ]
+        },
+        i
+      )) : prayerTimes.map((prayer) => /* @__PURE__ */ jsxs(
+        "div",
+        {
+          className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4",
+          children: [
+            /* @__PURE__ */ jsx4(prayer.icon, { className: "h-8 w-8" }),
+            /* @__PURE__ */ jsx4("span", { className: "font-medium", children: prayer.name }),
+            /* @__PURE__ */ jsx4("span", { className: "text-sm text-muted-foreground", children: prayer.time })
+          ]
+        },
+        prayer.name
+      )) }) })
+    ] });
   }
-  return /* @__PURE__ */ React.createElement(Card, { className: cn("w-full", className) }, /* @__PURE__ */ React.createElement(CardHeader, null, /* @__PURE__ */ React.createElement(CardTitle, { className: "flex items-center justify-between" }, /* @__PURE__ */ React.createElement("span", null, "Prayer Times"), /* @__PURE__ */ React.createElement("div", { className: "flex items-center text-sm font-normal" }, /* @__PURE__ */ React.createElement(Clock, { className: "mr-2 h-4 w-4" }), currentTime.toLocaleTimeString()))), /* @__PURE__ */ React.createElement(CardContent, null, /* @__PURE__ */ React.createElement("div", { className: "space-y-4" }, isLoading ? Array(5).fill(0).map((_, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "flex items-center justify-between" }, /* @__PURE__ */ React.createElement("div", { className: "flex items-center space-x-4" }, /* @__PURE__ */ React.createElement(Skeleton, { className: "h-8 w-8 rounded-full" }), /* @__PURE__ */ React.createElement(Skeleton, { className: "h-4 w-20" })), /* @__PURE__ */ React.createElement(Skeleton, { className: "h-4 w-16" }))) : prayerTimes.map((prayer) => /* @__PURE__ */ React.createElement(
-    "div",
-    {
-      key: prayer.name,
-      className: "flex items-center justify-between rounded-lg bg-muted p-4"
-    },
-    /* @__PURE__ */ React.createElement("div", { className: "flex items-center space-x-4" }, /* @__PURE__ */ React.createElement(prayer.icon, { className: "h-8 w-8" }), /* @__PURE__ */ React.createElement("span", { className: "font-medium" }, prayer.name)),
-    /* @__PURE__ */ React.createElement("span", { className: "text-sm text-muted-foreground" }, prayer.time)
-  )))));
+  return /* @__PURE__ */ jsxs(Card, { className: cn("w-full", className), children: [
+    /* @__PURE__ */ jsx4(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsx4("span", { children: "Prayer Times" }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center text-sm font-normal", children: [
+        /* @__PURE__ */ jsx4(Clock, { className: "mr-2 h-4 w-4" }),
+        currentTime.toLocaleTimeString()
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsx4(CardContent, { children: /* @__PURE__ */ jsx4("div", { className: "space-y-4", children: isLoading ? Array(5).fill(0).map((_, i) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
+        /* @__PURE__ */ jsx4(Skeleton, { className: "h-8 w-8 rounded-full" }),
+        /* @__PURE__ */ jsx4(Skeleton, { className: "h-4 w-20" })
+      ] }),
+      /* @__PURE__ */ jsx4(Skeleton, { className: "h-4 w-16" })
+    ] }, i)) : prayerTimes.map((prayer) => /* @__PURE__ */ jsxs(
+      "div",
+      {
+        className: "flex items-center justify-between rounded-lg bg-muted p-4",
+        children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
+            /* @__PURE__ */ jsx4(prayer.icon, { className: "h-8 w-8" }),
+            /* @__PURE__ */ jsx4("span", { className: "font-medium", children: prayer.name })
+          ] }),
+          /* @__PURE__ */ jsx4("span", { className: "text-sm text-muted-foreground", children: prayer.time })
+        ]
+      },
+      prayer.name
+    )) }) })
+  ] });
 }
 export {
   Alert,
