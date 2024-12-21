@@ -1,12 +1,9 @@
 "use client";
 
 import { cva } from "class-variance-authority";
-import { AlertCircle, Clock } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 // Utility function to combine class names
-import { usePrayerTimes } from "@/hooks/use-prayer-times";
-import { PrayerTimesProps } from "@/types/prayer-times";
 const cn = (...classes: (string | undefined)[]) =>
   classes.filter(Boolean).join(" ");
 
@@ -91,138 +88,186 @@ const Skeleton = ({
     {...props}
   />
 );
-// Main PrayerTimes Component
-export const PrayerTimes: React.FC<PrayerTimesProps & { minimized?: boolean }> = ({
-  layout = "horizontal",
-  latitude,
-  longitude,
-  className,
-  minimized = false,
-}) => {
-  const { prayerTimes, isLoading, error } = usePrayerTimes(latitude, longitude);
-  const [currentTime, setCurrentTime] = useState(new Date());
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000);
-    return () => clearInterval(timer);
-  }, []);
+// Add enums for better readability
+enum CalculationMethod {
+  Jafari = 0,
+  Karachi = 1,
+  ISNA = 2,
+  MWL = 3,
+  Makkah = 4,
+  Egypt = 5,
+  Tehran = 7,
+  Gulf = 8,
+  Kuwait = 9,
+  Qatar = 10,
+  Singapore = 11,
+  France = 12,
+  Turkey = 13,
+  Russia = 14,
+  Moonsighting = 15,
+  Dubai = 16,
+  Malaysia = 17,
+  Tunisia = 18,
+  Algeria = 19,
+  Indonesia = 20,
+  Morocco = 21,
+  Portugal = 22,
+  Jordan = 23,
+  Custom = 99,
+}
 
-  const getNextPrayer = () => {
-    if (!prayerTimes?.length) return null;
-    
-    const now = currentTime;
-    const currentTimeStr = now.toLocaleTimeString('en-US', { hour12: false });
-    
-    return prayerTimes.find(prayer => prayer.time > currentTimeStr) 
-      || prayerTimes[0]; // If no next prayer today, return first prayer of next day
+enum School {
+  Shafi = 0,
+  Hanafi = 1,
+}
+
+interface LocationConfig {
+  address?: string;
+  city?: string;
+  country?: string;
+  state?: string;
+  school?: School;
+  method?: CalculationMethod;
+  adjustments?: {
+    fajr?: number;
+    sunrise?: number;
+    dhuhr?: number;
+    asr?: number;
+    maghrib?: number;
+    isha?: number;
   };
+}
 
-  if (error) {
-    return (
-      <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <div>{error}</div>
-      </Alert>
-    );
-  }
+interface PrayerTimesProps {
+  minimized?: boolean;
+  styles?: {
+    container?: React.CSSProperties;
+    header?: React.CSSProperties;
+    timeBlock?: React.CSSProperties;
+    time?: React.CSSProperties;
+    select?: React.CSSProperties;
+  };
+  location?: LocationConfig;
+  showSettings?: boolean;
+}
 
-  if (minimized) {
-    const nextPrayer = getNextPrayer();
-    
-    return (
-      <Card className={cn("w-full", className)}>
-        <CardContent className="p-4">
-          {isLoading ? (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-8 w-8 rounded-full" />
-                <Skeleton className="h-4 w-20" />
-              </div>
-              <Skeleton className="h-4 w-16" />
-            </div>
-          ) : nextPrayer && (
-            <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
-              <div className="flex items-center space-x-4">
-                <nextPrayer.icon className="h-8 w-8" />
-                <span className="font-medium">{nextPrayer.name}</span>
-              </div>
-              <span className="text-sm text-gray-500">{nextPrayer.time}</span>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    );
-  }
+// Main PrayerTimes Component
+export const PrayerTimes: React.FC<PrayerTimesProps> = ({
+  minimized = false,
+  styles = {},
+  location: initialLocation,
+  showSettings = false,
+}) => {
+  const [location, setLocation] = useState<LocationConfig>(
+    initialLocation || {}
+  );
+  const [prayerData, setPrayerData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Create arrays of calculation methods and schools for the select dropdowns
+  const calculationMethods = Object.entries(CalculationMethod)
+    .filter(([key]) => isNaN(Number(key)))
+    .map(([key, value]) => ({
+      label: key.replace(/([A-Z])/g, " $1").trim(), // Add spaces before capital letters
+      value: value,
+    }));
+
+  const schools = Object.entries(School)
+    .filter(([key]) => isNaN(Number(key)))
+    .map(([key, value]) => ({
+      label: key,
+      value: value,
+    }));
+
+  // Settings component
+  const Settings = () => (
+    <div
+      className="settings-panel"
+      style={{
+        marginBottom: "1rem",
+        padding: "1rem",
+        backgroundColor: "#f8f9fa",
+        borderRadius: "8px",
+      }}
+    >
+      <div className="setting-group" style={{ marginBottom: "1rem" }}>
+        <label style={{ display: "block", marginBottom: "0.5rem" }}>
+          Calculation Method:
+          <select
+            value={location.method}
+            onChange={(e) =>
+              setLocation((prev) => ({
+                ...prev,
+                method: Number(e.target.value),
+              }))
+            }
+            style={{
+              width: "100%",
+              padding: "0.5rem",
+              borderRadius: "4px",
+              border: "1px solid #ddd",
+              ...styles.select,
+            }}
+          >
+            <option value="">Select Method</option>
+            {calculationMethods.map(({ label, value }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <div className="setting-group">
+        <label style={{ display: "block", marginBottom: "0.5rem" }}>
+          School:
+          <select
+            value={location.school}
+            onChange={(e) =>
+              setLocation((prev) => ({
+                ...prev,
+                school: Number(e.target.value),
+              }))
+            }
+            style={{
+              width: "100%",
+              padding: "0.5rem",
+              borderRadius: "4px",
+              border: "1px solid #ddd",
+              ...styles.select,
+            }}
+          >
+            {schools.map(({ label, value }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+    </div>
+  );
 
   return (
-    <Card className={cn("w-full", className)}>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>Prayer Times</span>
-          <div className="flex items-center text-sm font-normal">
-            <Clock className="mr-2 h-4 w-4" />
-            {currentTime.toLocaleTimeString()}
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div
-          className={
-            layout === "horizontal"
-              ? "grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5"
-              : "space-y-4"
-          }
-        >
-          {isLoading
-            ? Array(5)
-                .fill(0)
-                .map((_, i) =>
-                  layout === "horizontal" ? (
-                    <div
-                      key={i}
-                      className="flex flex-col items-center space-y-2"
-                    >
-                      <Skeleton className="h-8 w-8 rounded-full" />
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-4 w-16" />
-                    </div>
-                  ) : (
-                    <div key={i} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <Skeleton className="h-8 w-8 rounded-full" />
-                        <Skeleton className="h-4 w-20" />
-                      </div>
-                      <Skeleton className="h-4 w-16" />
-                    </div>
-                  )
-                )
-            : prayerTimes.map((prayer) =>
-                layout === "horizontal" ? (
-                  <div
-                    key={prayer.name}
-                    className="flex flex-col items-center space-y-2 rounded-lg bg-gray-50 p-4"
-                  >
-                    <prayer.icon className="h-8 w-8" />
-                    <span className="font-medium">{prayer.name}</span>
-                    <span className="text-sm text-gray-500">{prayer.time}</span>
-                  </div>
-                ) : (
-                  <div
-                    key={prayer.name}
-                    className="flex items-center justify-between rounded-lg bg-gray-50 p-4"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <prayer.icon className="h-8 w-8" />
-                      <span className="font-medium">{prayer.name}</span>
-                    </div>
-                    <span className="text-sm text-gray-500">{prayer.time}</span>
-                  </div>
-                )
-              )}
-        </div>
-      </CardContent>
-    </Card>
+    <div style={styles.container}>
+      <h2 style={styles.header}>Prayer Times</h2>
+
+      {showSettings && <Settings />}
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: minimized
+            ? "1fr"
+            : "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "1rem",
+        }}
+      >
+        {/* ... prayer times display ... */}
+      </div>
+    </div>
   );
 };
