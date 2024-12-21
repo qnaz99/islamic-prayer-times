@@ -46,7 +46,7 @@ interface PrayerTimesProps {
   showSettings?: boolean;
 }
 
-const PrayerTimes: React.FC<PrayerTimesProps> = ({
+export const PrayerTimes: React.FC<PrayerTimesProps> = ({
   minimized = false,
   styles = {},
   location: initialLocation = {},
