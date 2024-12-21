@@ -47,7 +47,10 @@ var schools = [
   { label: "Shafi", value: 0 },
   { label: "Hanafi", value: 1 }
 ];
-var PrayerTimes = ({
+var PrayerTimesDisplay = ({
+  layout = "horizontal",
+  latitude,
+  longitude,
   minimized = false,
   styles = {},
   location: initialLocation = {},
@@ -250,7 +253,6 @@ var PrayerTimes = ({
     )
   ] });
 };
-var prayer_times_default = PrayerTimes;
 
 // lib/utils.ts
 import { clsx } from "clsx";
@@ -422,7 +424,7 @@ function usePrayerTimes(latitude, longitude) {
   return { prayerTimes, isLoading, error };
 }
 export {
-  prayer_times_default as PrayerTimes,
+  PrayerTimesDisplay,
   cn,
   usePrayerTimes
 };

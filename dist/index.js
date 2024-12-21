@@ -49,7 +49,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
-  PrayerTimes: () => prayer_times_default,
+  PrayerTimesDisplay: () => PrayerTimesDisplay,
   cn: () => cn,
   usePrayerTimes: () => usePrayerTimes
 });
@@ -72,7 +72,10 @@ var schools = [
   { label: "Shafi", value: 0 },
   { label: "Hanafi", value: 1 }
 ];
-var PrayerTimes = ({
+var PrayerTimesDisplay = ({
+  layout = "horizontal",
+  latitude,
+  longitude,
   minimized = false,
   styles = {},
   location: initialLocation = {},
@@ -275,7 +278,6 @@ var PrayerTimes = ({
     )
   ] });
 };
-var prayer_times_default = PrayerTimes;
 
 // lib/utils.ts
 var import_clsx = require("clsx");
@@ -448,7 +450,7 @@ function usePrayerTimes(latitude, longitude) {
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  PrayerTimes,
+  PrayerTimesDisplay,
   cn,
   usePrayerTimes
 });
