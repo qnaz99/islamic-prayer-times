@@ -328,7 +328,8 @@ var PrayerTimes = ({
   layout = "horizontal",
   latitude,
   longitude,
-  className
+  className,
+  minimized = false
 }) => {
   const { prayerTimes, isLoading, error } = usePrayerTimes(latitude, longitude);
   const [currentTime, setCurrentTime] = useState2(/* @__PURE__ */ new Date());
@@ -338,11 +339,33 @@ var PrayerTimes = ({
     }, 6e4);
     return () => clearInterval(timer);
   }, []);
+  const getNextPrayer = () => {
+    if (!(prayerTimes == null ? void 0 : prayerTimes.length)) return null;
+    const now = currentTime;
+    const currentTimeStr = now.toLocaleTimeString("en-US", { hour12: false });
+    return prayerTimes.find((prayer) => prayer.time > currentTimeStr) || prayerTimes[0];
+  };
   if (error) {
     return /* @__PURE__ */ jsxs(Alert, { variant: "destructive", children: [
       /* @__PURE__ */ jsx(CircleAlert, { className: "h-4 w-4" }),
       /* @__PURE__ */ jsx("div", { children: error })
     ] });
+  }
+  if (minimized) {
+    const nextPrayer = getNextPrayer();
+    return /* @__PURE__ */ jsx(Card, { className: cn("w-full", className), children: /* @__PURE__ */ jsx(CardContent, { className: "p-4", children: isLoading ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
+        /* @__PURE__ */ jsx(Skeleton, { className: "h-8 w-8 rounded-full" }),
+        /* @__PURE__ */ jsx(Skeleton, { className: "h-4 w-20" })
+      ] }),
+      /* @__PURE__ */ jsx(Skeleton, { className: "h-4 w-16" })
+    ] }) : nextPrayer && /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between rounded-lg bg-gray-50 p-4", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
+        /* @__PURE__ */ jsx(nextPrayer.icon, { className: "h-8 w-8" }),
+        /* @__PURE__ */ jsx("span", { className: "font-medium", children: nextPrayer.name })
+      ] }),
+      /* @__PURE__ */ jsx("span", { className: "text-sm text-gray-500", children: nextPrayer.time })
+    ] }) }) });
   }
   return /* @__PURE__ */ jsxs(Card, { className: cn("w-full", className), children: [
     /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center justify-between", children: [

@@ -2,10 +2,11 @@ import React$1 from 'react';
 import { ClassValue } from 'clsx';
 
 interface PrayerTimesProps {
-    layout: "vertical" | "horizontal";
+    layout?: "horizontal" | "vertical";
+    latitude: number;
+    longitude: number;
     className?: string;
-    latitude?: number;
-    longitude?: number;
+    minimized?: boolean;
 }
 interface PrayerTime {
     name: string;
@@ -106,7 +107,9 @@ interface AladhanResponse {
     };
 }
 
-declare const PrayerTimes: React$1.FC<PrayerTimesProps>;
+declare const PrayerTimes: React$1.FC<PrayerTimesProps & {
+    minimized?: boolean;
+}>;
 
 declare function cn(...inputs: ClassValue[]): string;
 

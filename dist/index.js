@@ -363,7 +363,8 @@ var PrayerTimes = ({
   layout = "horizontal",
   latitude,
   longitude,
-  className
+  className,
+  minimized = false
 }) => {
   const { prayerTimes, isLoading, error } = usePrayerTimes(latitude, longitude);
   const [currentTime, setCurrentTime] = (0, import_react4.useState)(/* @__PURE__ */ new Date());
@@ -373,11 +374,33 @@ var PrayerTimes = ({
     }, 6e4);
     return () => clearInterval(timer);
   }, []);
+  const getNextPrayer = () => {
+    if (!(prayerTimes == null ? void 0 : prayerTimes.length)) return null;
+    const now = currentTime;
+    const currentTimeStr = now.toLocaleTimeString("en-US", { hour12: false });
+    return prayerTimes.find((prayer) => prayer.time > currentTimeStr) || prayerTimes[0];
+  };
   if (error) {
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Alert, { variant: "destructive", children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-4 w-4" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: error })
     ] });
+  }
+  if (minimized) {
+    const nextPrayer = getNextPrayer();
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, { className: cn("w-full", className), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { className: "p-4", children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center space-x-4", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "h-8 w-8 rounded-full" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "h-4 w-20" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "h-4 w-16" })
+    ] }) : nextPrayer && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between rounded-lg bg-gray-50 p-4", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center space-x-4", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(nextPrayer.icon, { className: "h-8 w-8" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "font-medium", children: nextPrayer.name })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-sm text-gray-500", children: nextPrayer.time })
+    ] }) }) });
   }
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { className: cn("w-full", className), children: [
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, { className: "flex items-center justify-between", children: [
