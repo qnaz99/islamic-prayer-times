@@ -1,4 +1,4 @@
-import * as React$1 from 'react';
+import React$1 from 'react';
 import { ClassValue } from 'clsx';
 
 interface PrayerTimesProps {

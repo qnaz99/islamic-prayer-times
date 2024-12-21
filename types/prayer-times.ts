@@ -1,8 +1,9 @@
 export interface PrayerTimesProps {
-  layout: "vertical" | "horizontal";
+  layout?: "horizontal" | "vertical";
+  latitude: number;
+  longitude: number;
   className?: string;
-  latitude?: number;
-  longitude?: number;
+  minimized?: boolean;
 }
 
 export interface PrayerTime {

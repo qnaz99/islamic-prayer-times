@@ -92,11 +92,12 @@ const Skeleton = ({
   />
 );
 // Main PrayerTimes Component
-export const PrayerTimes: React.FC<PrayerTimesProps> = ({
+export const PrayerTimes: React.FC<PrayerTimesProps & { minimized?: boolean }> = ({
   layout = "horizontal",
   latitude,
   longitude,
   className,
+  minimized = false,
 }) => {
   const { prayerTimes, isLoading, error } = usePrayerTimes(latitude, longitude);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -108,12 +109,50 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({
     return () => clearInterval(timer);
   }, []);
 
+  const getNextPrayer = () => {
+    if (!prayerTimes?.length) return null;
+    
+    const now = currentTime;
+    const currentTimeStr = now.toLocaleTimeString('en-US', { hour12: false });
+    
+    return prayerTimes.find(prayer => prayer.time > currentTimeStr) 
+      || prayerTimes[0]; // If no next prayer today, return first prayer of next day
+  };
+
   if (error) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <div>{error}</div>
       </Alert>
+    );
+  }
+
+  if (minimized) {
+    const nextPrayer = getNextPrayer();
+    
+    return (
+      <Card className={cn("w-full", className)}>
+        <CardContent className="p-4">
+          {isLoading ? (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+              <Skeleton className="h-4 w-16" />
+            </div>
+          ) : nextPrayer && (
+            <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
+              <div className="flex items-center space-x-4">
+                <nextPrayer.icon className="h-8 w-8" />
+                <span className="font-medium">{nextPrayer.name}</span>
+              </div>
+              <span className="text-sm text-gray-500">{nextPrayer.time}</span>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     );
   }
 
