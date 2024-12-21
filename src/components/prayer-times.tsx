@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Clock, Moon, Sun, Sunrise, Sunset } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Clock, Sunrise, Sun, Sunset, Moon } from "lucide-react";
 
 // Constants and types
 const calculationMethods = [
@@ -42,9 +42,6 @@ interface LocationConfig {
 }
 
 interface PrayerTimesProps {
-  layout?: "horizontal" | "vertical";
-  latitude?: number;
-  longitude?: number;
   minimized?: boolean;
   showNextOnly?: boolean;
   styles?: {
@@ -70,6 +67,77 @@ function Skeleton({
   );
 }
 
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-xl border bg-card text-card-foreground shadow",
+      className
+    )}
+    {...props}
+  />
+));
+Card.displayName = "Card";
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+));
+CardHeader.displayName = "CardHeader";
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn("font-semibold leading-none tracking-tight", className)}
+    {...props}
+  />
+));
+CardTitle.displayName = "CardTitle";
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+));
+CardDescription.displayName = "CardDescription";
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+));
+CardContent.displayName = "CardContent";
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+));
+CardFooter.displayName = "CardFooter";
+
 const PrayerTimesSkeleton = ({ minimized = false }) => (
   <div className="space-y-4 p-5">
     <Skeleton className="h-8 w-[150px]" />
@@ -91,9 +159,6 @@ const PrayerTimesSkeleton = ({ minimized = false }) => (
 );
 
 export const PrayerTimesDisplay = ({
-  layout = "horizontal",
-  latitude,
-  longitude,
   minimized = false,
   showNextOnly = false,
   styles = {},
@@ -105,6 +170,7 @@ export const PrayerTimesDisplay = ({
   const [prayerData, setPrayerData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   // Get coordinates from browser geolocation
   const getCurrentPosition = (): Promise<Coordinates> => {
@@ -221,6 +287,15 @@ export const PrayerTimesDisplay = ({
     fetchPrayerTimes();
   }, [coordinates, location.method, location.school]);
 
+  // Add current time update effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const Settings = () => (
     <div
       className="settings-panel"
@@ -311,82 +386,81 @@ export const PrayerTimesDisplay = ({
     { name: "Isha", time: prayerData.timings.Isha, icon: Moon },
   ];
 
-  const getNextPrayer = (prayerTimes: Array<{ name: string; time: string }>) => {
+  const getNextPrayer = (
+    prayerTimes: Array<{ name: string; time: string; icon: React.ElementType }>
+  ) => {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
-    
+
     for (const prayer of prayerTimes) {
-      const [hours, minutes] = prayer.time.split(':').map(Number);
+      const [hours, minutes] = prayer.time.split(":").map(Number);
       const prayerTime = hours * 60 + minutes;
-      
+
       if (prayerTime > currentTime) {
         return prayer;
       }
     }
-    
+
     // If no next prayer today, return first prayer of next day
     return prayerTimes[0];
   };
-
   return (
-    <div style={containerStyles}>
-      <h2 style={styles.header}>
-        {showNextOnly ? 'Next Prayer' : 'Prayer Times'}
-      </h2>
+    <Card className="w-full" style={containerStyles}>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <span>{showNextOnly ? "Next Prayer" : "Prayer Times"}</span>
+          <div className="flex items-center text-sm font-normal">
+            <Clock className="mr-2 h-4 w-4" />
+            {currentTime.toLocaleTimeString()}
+          </div>
+        </CardTitle>
+      </CardHeader>
 
-      {showSettings && <Settings />}
+      <CardContent>
+        {showSettings && <Settings />}
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: minimized || showNextOnly
-            ? "1fr"
-            : "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "1rem",
-        }}
-      >
-        {showNextOnly ? (
-          (() => {
-            const nextPrayer = getNextPrayer(prayerTimes);
-            return (
-              <div
-                key={nextPrayer.name}
-                style={{
-                  padding: "1rem",
-                  backgroundColor: "#f5f5f5",
-                  borderRadius: "4px",
-                  textAlign: "center",
-                  ...styles.timeBlock,
-                }}
-              >
-                <h3 style={{ margin: "0 0 0.5rem 0" }}>{nextPrayer.name}</h3>
-                <p style={{ margin: 0, fontSize: "1.2rem", ...styles.time }}>
-                  {nextPrayer.time}
-                </p>
-              </div>
-            );
-          })()
-        ) : (
-          prayerTimes.map(({ name, time, icon }) => (
-            <div
-              key={name}
-              style={{
-                padding: "1rem",
-                backgroundColor: "#f5f5f5",
-                borderRadius: "4px",
-                textAlign: "center",
-                ...styles.timeBlock,
-              }}
-            >
-              {React.createElement(icon, { size: 24, style: { margin: '0 auto 0.5rem' } })}
-              <h3 style={{ margin: "0 0 0.5rem 0" }}>{name}</h3>
-              <p style={{ margin: 0, fontSize: "1.2rem", ...styles.time }}>
-                {time}
-              </p>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
+        <div
+          className={cn(
+            "grid gap-4",
+            minimized || showNextOnly
+              ? "grid-cols-1"
+              : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
+          )}
+        >
+          {showNextOnly
+            ? (() => {
+                const nextPrayer = getNextPrayer(prayerTimes);
+                return (
+                  <div
+                    key={nextPrayer.name}
+                    className="flex flex-col items-center space-y-2 rounded-lg bg-muted p-4"
+                  >
+                    {React.createElement(nextPrayer.icon, {
+                      size: 24,
+                      className: "mb-2",
+                    })}
+                    <h3 className="font-medium">{nextPrayer.name}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {nextPrayer.time}
+                    </p>
+                  </div>
+                );
+              })()
+            : prayerTimes.map(({ name, time, icon }) => (
+                <div
+                  key={name}
+                  className="flex flex-col items-center space-y-2 rounded-lg bg-muted p-4"
+                >
+                  {React.createElement(icon, {
+                    size: 24,
+                    className: "mb-2",
+                  })}
+                  <h3 className="font-medium">{name}</h3>
+                  <p className="text-sm text-muted-foreground">{time}</p>
+                </div>
+              ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
