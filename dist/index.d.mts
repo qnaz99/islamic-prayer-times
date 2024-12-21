@@ -19,11 +19,14 @@ interface PrayerTimesProps$1 {
         timeBlock?: React$1.CSSProperties;
         time?: React$1.CSSProperties;
         select?: React$1.CSSProperties;
+        title?: React$1.CSSProperties;
     };
     location?: LocationConfig;
     showSettings?: boolean;
+    showJumuah?: boolean;
+    showSunrise?: boolean;
 }
-declare const PrayerTimesDisplay: ({ minimized, showNextOnly, styles, location: initialLocation, showSettings, }: PrayerTimesProps$1) => react_jsx_runtime.JSX.Element | null;
+declare const PrayerTimesDisplay: ({ minimized, showNextOnly, styles, location: initialLocation, showSettings, showJumuah, showSunrise, }: PrayerTimesProps$1) => react_jsx_runtime.JSX.Element | null;
 
 interface PrayerTimesProps {
     layout?: "horizontal" | "vertical";

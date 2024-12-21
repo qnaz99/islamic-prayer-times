@@ -2631,7 +2631,9 @@ var PrayerTimesDisplay = ({
   showNextOnly = false,
   styles = {},
   location: initialLocation = {},
-  showSettings = false
+  showSettings = false,
+  showJumuah = false,
+  showSunrise = false
 }) => {
   const [location, setLocation] = useState(initialLocation);
   const [coordinates, setCoordinates] = useState(null);
@@ -2800,8 +2802,9 @@ var PrayerTimesDisplay = ({
   if (!prayerData) return null;
   const prayerTimes = [
     { name: "Fajr", time: prayerData.timings.Fajr, icon: Moon },
-    { name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise },
+    ...showSunrise ? [{ name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise }] : [],
     { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: Sun },
+    ...showJumuah && currentTime.getDay() === 5 ? [{ name: "Jumu'ah", time: "13:00", icon: Sun }] : [],
     { name: "Asr", time: prayerData.timings.Asr, icon: Sun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: Sunset },
     { name: "Isha", time: prayerData.timings.Isha, icon: Moon }
@@ -2819,13 +2822,20 @@ var PrayerTimesDisplay = ({
     return prayerTimes2[0];
   };
   return /* @__PURE__ */ jsxs(Card, { className: "w-full", style: containerStyles, children: [
-    /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center justify-between", children: [
-      /* @__PURE__ */ jsx("span", { children: showNextOnly ? "Next Prayer" : "Prayer Times" }),
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center text-sm font-normal", children: [
-        /* @__PURE__ */ jsx(Clock, { className: "mr-2 h-4 w-4" }),
-        currentTime.toLocaleTimeString()
-      ] })
-    ] }) }),
+    /* @__PURE__ */ jsx(CardHeader, { style: styles.header, children: /* @__PURE__ */ jsxs(
+      CardTitle,
+      {
+        className: "flex items-center justify-between",
+        style: styles.title,
+        children: [
+          /* @__PURE__ */ jsx("span", { children: showNextOnly ? "Next Prayer" : "Prayer Times" }),
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center text-sm font-normal", children: [
+            /* @__PURE__ */ jsx(Clock, { className: "mr-2 h-4 w-4" }),
+            currentTime.toLocaleTimeString()
+          ] })
+        ]
+      }
+    ) }),
     /* @__PURE__ */ jsxs(CardContent, { children: [
       showSettings && /* @__PURE__ */ jsx(Settings, {}),
       /* @__PURE__ */ jsx(
@@ -2841,13 +2851,21 @@ var PrayerTimesDisplay = ({
               "div",
               {
                 className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4",
+                style: styles.timeBlock,
                 children: [
                   React.createElement(nextPrayer.icon, {
                     size: 24,
                     className: "mb-2"
                   }),
                   /* @__PURE__ */ jsx("h3", { className: "font-medium", children: nextPrayer.name }),
-                  /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground", children: nextPrayer.time })
+                  /* @__PURE__ */ jsx(
+                    "p",
+                    {
+                      className: "text-sm text-muted-foreground",
+                      style: styles.time,
+                      children: nextPrayer.time
+                    }
+                  )
                 ]
               },
               nextPrayer.name
@@ -2856,13 +2874,21 @@ var PrayerTimesDisplay = ({
             "div",
             {
               className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4",
+              style: styles.timeBlock,
               children: [
                 React.createElement(icon, {
                   size: 24,
                   className: "mb-2"
                 }),
                 /* @__PURE__ */ jsx("h3", { className: "font-medium", children: name }),
-                /* @__PURE__ */ jsx("p", { className: "text-sm text-muted-foreground", children: time })
+                /* @__PURE__ */ jsx(
+                  "p",
+                  {
+                    className: "text-sm text-muted-foreground",
+                    style: styles.time,
+                    children: time
+                  }
+                )
               ]
             },
             name

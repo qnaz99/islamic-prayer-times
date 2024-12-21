@@ -2666,7 +2666,9 @@ var PrayerTimesDisplay = ({
   showNextOnly = false,
   styles = {},
   location: initialLocation = {},
-  showSettings = false
+  showSettings = false,
+  showJumuah = false,
+  showSunrise = false
 }) => {
   const [location, setLocation] = (0, import_react.useState)(initialLocation);
   const [coordinates, setCoordinates] = (0, import_react.useState)(null);
@@ -2835,8 +2837,9 @@ var PrayerTimesDisplay = ({
   if (!prayerData) return null;
   const prayerTimes = [
     { name: "Fajr", time: prayerData.timings.Fajr, icon: import_lucide_react.Moon },
-    { name: "Sunrise", time: prayerData.timings.Sunrise, icon: import_lucide_react.Sunrise },
+    ...showSunrise ? [{ name: "Sunrise", time: prayerData.timings.Sunrise, icon: import_lucide_react.Sunrise }] : [],
     { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: import_lucide_react.Sun },
+    ...showJumuah && currentTime.getDay() === 5 ? [{ name: "Jumu'ah", time: "13:00", icon: import_lucide_react.Sun }] : [],
     { name: "Asr", time: prayerData.timings.Asr, icon: import_lucide_react.Sun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: import_lucide_react.Sunset },
     { name: "Isha", time: prayerData.timings.Isha, icon: import_lucide_react.Moon }
@@ -2854,13 +2857,20 @@ var PrayerTimesDisplay = ({
     return prayerTimes2[0];
   };
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { className: "w-full", style: containerStyles, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, { className: "flex items-center justify-between", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: showNextOnly ? "Next Prayer" : "Prayer Times" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center text-sm font-normal", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_lucide_react.Clock, { className: "mr-2 h-4 w-4" }),
-        currentTime.toLocaleTimeString()
-      ] })
-    ] }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { style: styles.header, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+      CardTitle,
+      {
+        className: "flex items-center justify-between",
+        style: styles.title,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: showNextOnly ? "Next Prayer" : "Prayer Times" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center text-sm font-normal", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_lucide_react.Clock, { className: "mr-2 h-4 w-4" }),
+            currentTime.toLocaleTimeString()
+          ] })
+        ]
+      }
+    ) }),
     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [
       showSettings && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, {}),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
@@ -2876,13 +2886,21 @@ var PrayerTimesDisplay = ({
               "div",
               {
                 className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4",
+                style: styles.timeBlock,
                 children: [
                   import_react.default.createElement(nextPrayer.icon, {
                     size: 24,
                     className: "mb-2"
                   }),
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: "font-medium", children: nextPrayer.name }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm text-muted-foreground", children: nextPrayer.time })
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                    "p",
+                    {
+                      className: "text-sm text-muted-foreground",
+                      style: styles.time,
+                      children: nextPrayer.time
+                    }
+                  )
                 ]
               },
               nextPrayer.name
@@ -2891,13 +2909,21 @@ var PrayerTimesDisplay = ({
             "div",
             {
               className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4",
+              style: styles.timeBlock,
               children: [
                 import_react.default.createElement(icon, {
                   size: 24,
                   className: "mb-2"
                 }),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: "font-medium", children: name }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm text-muted-foreground", children: time })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                  "p",
+                  {
+                    className: "text-sm text-muted-foreground",
+                    style: styles.time,
+                    children: time
+                  }
+                )
               ]
             },
             name

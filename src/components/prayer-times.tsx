@@ -47,6 +47,7 @@ interface PrayerTimesProps {
   styles?: {
     container?: React.CSSProperties;
     header?: React.CSSProperties;
+    timeBlockContainer?: React.CSSProperties;
     timeBlock?: React.CSSProperties;
     time?: React.CSSProperties;
     select?: React.CSSProperties;
@@ -439,6 +440,7 @@ export const PrayerTimesDisplay = ({
               ? "grid-cols-1"
               : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
           )}
+          style={styles.timeBlockContainer}
         >
           {showNextOnly
             ? (() => {
