@@ -22,7 +22,8 @@ A modern React component for displaying Islamic prayer times with support for bo
 
 ## Features
 
-- 🎨 Two layout options: Horizontal and Vertical
+- 🎨 Multiple display options: Horizontal, Vertical, and Minimized
+- 🎯 Next prayer time focus mode
 - 🌍 Automatic location detection
 - ⚡ Real-time updates
 - 🎯 Precise prayer times using Aladhan API
@@ -55,6 +56,11 @@ function App() {
 function App() {
   return <PrayerTimes layout="vertical" />;
 }
+
+// Minimized View (only next prayer)
+function App() {
+  return <PrayerTimes showNextOnly={true} />;
+}
 ```
 
 ### With Custom Location
@@ -68,6 +74,22 @@ function App() {
     school: 0, // Shafi school
   }}
 />
+```
+
+### Display Options
+
+```jsx
+// Minimized view with only the next prayer
+<PrayerTimes
+  minimized={true}
+  showNextOnly={true}
+/>
+
+// Full view with only the next prayer
+<PrayerTimes showNextOnly={true} />
+
+// Minimized view with all prayers
+<PrayerTimes minimized={true} />
 ```
 
 ### With Custom Styles
@@ -94,12 +116,14 @@ function App() {
 
 ## Props
 
-| Prop           | Type                           | Default        | Description         |
-| -------------- | ------------------------------ | -------------- | ------------------- |
-| `layout`       | `'horizontal'` \| `'vertical'` | `'horizontal'` | Layout style        |
-| `styles`       | `object`                       | `{}`           | Custom styles       |
-| `location`     | `object`                       | `{}`           | Location config     |
-| `showSettings` | `boolean`                      | `false`        | Show settings panel |
+| Prop           | Type                           | Default        | Description               |
+| -------------- | ------------------------------ | -------------- | ------------------------- |
+| `layout`       | `'horizontal'` \| `'vertical'` | `'horizontal'` | Layout style              |
+| `minimized`    | `boolean`                      | `false`        | Enable minimized view     |
+| `showNextOnly` | `boolean`                      | `false`        | Show only the next prayer |
+| `styles`       | `object`                       | `{}`           | Custom styles             |
+| `location`     | `object`                       | `{}`           | Location config           |
+| `showSettings` | `boolean`                      | `false`        | Show settings panel       |
 
 ### Location Configuration
 

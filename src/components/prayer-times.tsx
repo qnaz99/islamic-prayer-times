@@ -45,6 +45,7 @@ interface PrayerTimesProps {
   latitude?: number;
   longitude?: number;
   minimized?: boolean;
+  showNextOnly?: boolean;
   styles?: {
     container?: React.CSSProperties;
     header?: React.CSSProperties;
@@ -93,6 +94,7 @@ export const PrayerTimesDisplay = ({
   latitude,
   longitude,
   minimized = false,
+  showNextOnly = false,
   styles = {},
   location: initialLocation = {},
   showSettings = false,
@@ -308,38 +310,80 @@ export const PrayerTimesDisplay = ({
     { name: "Isha", time: prayerData.timings.Isha },
   ];
 
+  const getNextPrayer = (prayerTimes: Array<{ name: string; time: string }>) => {
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    
+    for (const prayer of prayerTimes) {
+      const [hours, minutes] = prayer.time.split(':').map(Number);
+      const prayerTime = hours * 60 + minutes;
+      
+      if (prayerTime > currentTime) {
+        return prayer;
+      }
+    }
+    
+    // If no next prayer today, return first prayer of next day
+    return prayerTimes[0];
+  };
+
   return (
     <div style={containerStyles}>
-      <h2 style={styles.header}>Prayer Times</h2>
+      <h2 style={styles.header}>
+        {showNextOnly ? 'Next Prayer' : 'Prayer Times'}
+      </h2>
 
       {showSettings && <Settings />}
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: minimized
+          gridTemplateColumns: minimized || showNextOnly
             ? "1fr"
             : "repeat(auto-fit, minmax(200px, 1fr))",
           gap: "1rem",
         }}
       >
-        {prayerTimes.map(({ name, time }) => (
-          <div
-            key={name}
-            style={{
-              padding: "1rem",
-              backgroundColor: "#f5f5f5",
-              borderRadius: "4px",
-              textAlign: "center",
-              ...styles.timeBlock,
-            }}
-          >
-            <h3 style={{ margin: "0 0 0.5rem 0" }}>{name}</h3>
-            <p style={{ margin: 0, fontSize: "1.2rem", ...styles.time }}>
-              {time}
-            </p>
-          </div>
-        ))}
+        {showNextOnly ? (
+          (() => {
+            const nextPrayer = getNextPrayer(prayerTimes);
+            return (
+              <div
+                key={nextPrayer.name}
+                style={{
+                  padding: "1rem",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "4px",
+                  textAlign: "center",
+                  ...styles.timeBlock,
+                }}
+              >
+                <h3 style={{ margin: "0 0 0.5rem 0" }}>{nextPrayer.name}</h3>
+                <p style={{ margin: 0, fontSize: "1.2rem", ...styles.time }}>
+                  {nextPrayer.time}
+                </p>
+              </div>
+            );
+          })()
+        ) : (
+          prayerTimes.map(({ name, time }) => (
+            <div
+              key={name}
+              style={{
+                padding: "1rem",
+                backgroundColor: "#f5f5f5",
+                borderRadius: "4px",
+                textAlign: "center",
+                ...styles.timeBlock,
+              }}
+            >
+              <h3 style={{ margin: "0 0 0.5rem 0" }}>{name}</h3>
+              <p style={{ margin: 0, fontSize: "1.2rem", ...styles.time }}>
+                {time}
+              </p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
