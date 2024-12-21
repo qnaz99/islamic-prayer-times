@@ -388,10 +388,9 @@ export const PrayerTimesDisplay = ({
     ...(showSunrise
       ? [{ name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise }]
       : []),
-    { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: Sun },
     ...(showJumuah && currentTime.getDay() === 5
-      ? [{ name: "Jumu'ah", time: "13:00", icon: Sun }]
-      : []),
+      ? [{ name: "Jumu'ah", time: prayerData.timings.Dhuhr, icon: Sun }]
+      : [{ name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: Sun }]),
     { name: "Asr", time: prayerData.timings.Asr, icon: Sun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: Sunset },
     { name: "Isha", time: prayerData.timings.Isha, icon: Moon },
