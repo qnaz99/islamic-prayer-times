@@ -421,12 +421,9 @@ function usePrayerTimes(latitude, longitude) {
   }, [latitude, longitude]);
   return { prayerTimes, isLoading, error };
 }
-
-// src/index.ts
-var index_default = prayer_times_default;
 export {
+  prayer_times_default as PrayerTimes,
   cn,
-  index_default as default,
   usePrayerTimes
 };
 /*! Bundled license information:

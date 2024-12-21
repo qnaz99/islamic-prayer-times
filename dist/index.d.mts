@@ -1,28 +1,13 @@
 import React$1 from 'react';
 import { ClassValue } from 'clsx';
 
-interface LocationConfig {
-    address?: string;
-    city?: string;
-    country?: string;
-    state?: string;
-    school?: number;
-    method?: number;
-}
-interface PrayerTimesProps {
+interface PrayerTimesProps$1 {
+    layout?: "horizontal" | "vertical";
+    latitude: number;
+    longitude: number;
+    className?: string;
     minimized?: boolean;
-    styles?: {
-        container?: React$1.CSSProperties;
-        header?: React$1.CSSProperties;
-        timeBlock?: React$1.CSSProperties;
-        time?: React$1.CSSProperties;
-        select?: React$1.CSSProperties;
-    };
-    location?: LocationConfig;
-    showSettings?: boolean;
 }
-declare const PrayerTimes: React$1.FC<PrayerTimesProps>;
-
 interface PrayerTime {
     name: string;
     time: string;
@@ -122,6 +107,28 @@ interface AladhanResponse {
     };
 }
 
+interface LocationConfig {
+    address?: string;
+    city?: string;
+    country?: string;
+    state?: string;
+    school?: number;
+    method?: number;
+}
+interface PrayerTimesProps {
+    minimized?: boolean;
+    styles?: {
+        container?: React$1.CSSProperties;
+        header?: React$1.CSSProperties;
+        timeBlock?: React$1.CSSProperties;
+        time?: React$1.CSSProperties;
+        select?: React$1.CSSProperties;
+    };
+    location?: LocationConfig;
+    showSettings?: boolean;
+}
+declare const PrayerTimes: React$1.FC<PrayerTimesProps>;
+
 declare function cn(...inputs: ClassValue[]): string;
 
 declare function usePrayerTimes(latitude?: number, longitude?: number): {
@@ -130,4 +137,4 @@ declare function usePrayerTimes(latitude?: number, longitude?: number): {
     error: string | null;
 };
 
-export { type AladhanResponse, type PrayerTime, cn, PrayerTimes as default, usePrayerTimes };
+export { type AladhanResponse, type PrayerTime, PrayerTimes, type PrayerTimesProps$1 as PrayerTimesProps, cn, usePrayerTimes };

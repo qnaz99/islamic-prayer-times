@@ -49,8 +49,8 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
+  PrayerTimes: () => prayer_times_default,
   cn: () => cn,
-  default: () => index_default,
   usePrayerTimes: () => usePrayerTimes
 });
 module.exports = __toCommonJS(index_exports);
@@ -446,11 +446,9 @@ function usePrayerTimes(latitude, longitude) {
   }, [latitude, longitude]);
   return { prayerTimes, isLoading, error };
 }
-
-// src/index.ts
-var index_default = prayer_times_default;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  PrayerTimes,
   cn,
   usePrayerTimes
 });
