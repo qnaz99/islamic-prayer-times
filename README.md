@@ -43,7 +43,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![React Prayer Times Screen Shot][product-screenshot]](https://example.com)
+[![React Prayer Times Screen Shot][product-screenshot]](/public/screenshot.png)
 
 React Prayer Times is a modern, flexible React component that displays Islamic prayer times with multiple layout options. It uses the Aladhan API to fetch accurate prayer times based on location and provides both horizontal and vertical layout options.
 
@@ -59,8 +59,10 @@ Key Features:
 
 ### Built With
 
-* [![React][React.js]][React-url]
-* [![TypeScript][TypeScript]][TypeScript-url]
+* [![React][React.js]]["https://www.letsreact.org"]
+* [![NextJS][Next.js]]["https://nextjs.org"]
+* [![TypeScript][TypeScript]][https://www.typescriptlang.org]
+* [![TailwindCSS][TailwindCSS]][https://tailwindcss.com]
 * [Aladhan API](https://aladhan.com/prayer-times-api)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -72,4 +74,4 @@ Key Features:
 
 * npm
   ```sh
-  npm install
+  yarn install
