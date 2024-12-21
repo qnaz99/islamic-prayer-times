@@ -119,6 +119,7 @@ var PrayerTimesDisplay = ({
   latitude,
   longitude,
   minimized = false,
+  showNextOnly = false,
   styles = {},
   location: initialLocation = {},
   showSettings = false
@@ -289,18 +290,48 @@ var PrayerTimesDisplay = ({
     { name: "Maghrib", time: prayerData.timings.Maghrib },
     { name: "Isha", time: prayerData.timings.Isha }
   ];
+  const getNextPrayer = (prayerTimes2) => {
+    const now = /* @__PURE__ */ new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    for (const prayer of prayerTimes2) {
+      const [hours, minutes] = prayer.time.split(":").map(Number);
+      const prayerTime = hours * 60 + minutes;
+      if (prayerTime > currentTime) {
+        return prayer;
+      }
+    }
+    return prayerTimes2[0];
+  };
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: containerStyles, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: styles.header, children: "Prayer Times" }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: styles.header, children: showNextOnly ? "Next Prayer" : "Prayer Times" }),
     showSettings && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, {}),
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       "div",
       {
         style: {
           display: "grid",
-          gridTemplateColumns: minimized ? "1fr" : "repeat(auto-fit, minmax(200px, 1fr))",
+          gridTemplateColumns: minimized || showNextOnly ? "1fr" : "repeat(auto-fit, minmax(200px, 1fr))",
           gap: "1rem"
         },
-        children: prayerTimes.map(({ name, time }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+        children: showNextOnly ? (() => {
+          const nextPrayer = getNextPrayer(prayerTimes);
+          return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+            "div",
+            {
+              style: __spreadValues({
+                padding: "1rem",
+                backgroundColor: "#f5f5f5",
+                borderRadius: "4px",
+                textAlign: "center"
+              }, styles.timeBlock),
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { margin: "0 0 0.5rem 0" }, children: nextPrayer.name }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: __spreadValues({ margin: 0, fontSize: "1.2rem" }, styles.time), children: nextPrayer.time })
+              ]
+            },
+            nextPrayer.name
+          );
+        })() : prayerTimes.map(({ name, time }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
           "div",
           {
             style: __spreadValues({

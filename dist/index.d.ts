@@ -15,6 +15,7 @@ interface PrayerTimesProps$1 {
     latitude?: number;
     longitude?: number;
     minimized?: boolean;
+    showNextOnly?: boolean;
     styles?: {
         container?: React$1.CSSProperties;
         header?: React$1.CSSProperties;
@@ -25,7 +26,7 @@ interface PrayerTimesProps$1 {
     location?: LocationConfig;
     showSettings?: boolean;
 }
-declare const PrayerTimesDisplay: ({ layout, latitude, longitude, minimized, styles, location: initialLocation, showSettings, }: PrayerTimesProps$1) => react_jsx_runtime.JSX.Element | null;
+declare const PrayerTimesDisplay: ({ layout, latitude, longitude, minimized, showNextOnly, styles, location: initialLocation, showSettings, }: PrayerTimesProps$1) => react_jsx_runtime.JSX.Element | null;
 
 interface PrayerTimesProps {
     layout?: "horizontal" | "vertical";

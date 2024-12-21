@@ -25,8 +25,7 @@
   "author": "Ray Pingwing",
   "license": "MIT",
   "dependencies": {
-    "clsx": "^2.0.0",
-    "tailwind-merge": "^2.0.0"
+    "lucide-react": "^0.294.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -38,7 +37,8 @@
     "typescript": "^5"
   },
   "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "lucide-react": "^0.294.0"
   }
 }

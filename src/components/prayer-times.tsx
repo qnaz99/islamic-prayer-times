@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
+import { Clock, Sunrise, Sun, Sunset, Moon } from "lucide-react";
 
 // Constants and types
 const calculationMethods = [
@@ -302,12 +303,12 @@ export const PrayerTimesDisplay = ({
   if (!prayerData) return null;
 
   const prayerTimes = [
-    { name: "Fajr", time: prayerData.timings.Fajr },
-    { name: "Sunrise", time: prayerData.timings.Sunrise },
-    { name: "Dhuhr", time: prayerData.timings.Dhuhr },
-    { name: "Asr", time: prayerData.timings.Asr },
-    { name: "Maghrib", time: prayerData.timings.Maghrib },
-    { name: "Isha", time: prayerData.timings.Isha },
+    { name: "Fajr", time: prayerData.timings.Fajr, icon: Moon },
+    { name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise },
+    { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: Sun },
+    { name: "Asr", time: prayerData.timings.Asr, icon: Sun },
+    { name: "Maghrib", time: prayerData.timings.Maghrib, icon: Sunset },
+    { name: "Isha", time: prayerData.timings.Isha, icon: Moon },
   ];
 
   const getNextPrayer = (prayerTimes: Array<{ name: string; time: string }>) => {
@@ -366,7 +367,7 @@ export const PrayerTimesDisplay = ({
             );
           })()
         ) : (
-          prayerTimes.map(({ name, time }) => (
+          prayerTimes.map(({ name, time, icon }) => (
             <div
               key={name}
               style={{
@@ -377,6 +378,7 @@ export const PrayerTimesDisplay = ({
                 ...styles.timeBlock,
               }}
             >
+              {React.createElement(icon, { size: 24, style: { margin: '0 auto 0.5rem' } })}
               <h3 style={{ margin: "0 0 0.5rem 0" }}>{name}</h3>
               <p style={{ margin: 0, fontSize: "1.2rem", ...styles.time }}>
                 {time}
