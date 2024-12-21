@@ -1,7 +1,8 @@
+import { PrayerTimesDisplay } from "./components/prayer-times";
+
 // Prayer Times Component
 export type { PrayerTimesProps } from "../types/prayer-times";
-export { PrayerTimes };
-import PrayerTimes from "./components/prayer-times";
+export { PrayerTimesDisplay };
 
 // Types
   export type { AladhanResponse, PrayerTime } from "../types/prayer-times";

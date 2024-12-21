@@ -34,6 +34,9 @@ interface LocationConfig {
 }
 
 interface PrayerTimesProps {
+  layout?: "horizontal" | "vertical";
+  latitude?: number;
+  longitude?: number;
   minimized?: boolean;
   styles?: {
     container?: React.CSSProperties;
@@ -46,12 +49,15 @@ interface PrayerTimesProps {
   showSettings?: boolean;
 }
 
-export const PrayerTimes: React.FC<PrayerTimesProps> = ({
+export const PrayerTimesDisplay = ({
+  layout = "horizontal",
+  latitude,
+  longitude,
   minimized = false,
   styles = {},
   location: initialLocation = {},
   showSettings = false,
-}) => {
+}: PrayerTimesProps) => {
   const [location, setLocation] = useState(initialLocation);
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [prayerData, setPrayerData] = useState<any>(null);
@@ -299,5 +305,3 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({
     </div>
   );
 };
-
-export default PrayerTimes;
