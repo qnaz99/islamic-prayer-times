@@ -1,6 +1,6 @@
 {
   "name": "react-islamic-prayer-times",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A React component library for Islamic prayer times",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
