@@ -1,0 +1,15 @@
+/* Base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Component-specific styles */
+.prayer-card {
+  @apply rounded-lg border bg-white shadow-sm p-4;
+}
+
+.prayer-time {
+  @apply text-sm font-medium;
+}
+
+/* ... other necessary styles ... */ 
