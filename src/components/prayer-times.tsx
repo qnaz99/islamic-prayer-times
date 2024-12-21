@@ -50,9 +50,12 @@ interface PrayerTimesProps {
     timeBlock?: React.CSSProperties;
     time?: React.CSSProperties;
     select?: React.CSSProperties;
+    title?: React.CSSProperties;
   };
   location?: LocationConfig;
   showSettings?: boolean;
+  showJumuah?: boolean;
+  showSunrise?: boolean;
 }
 
 function Skeleton({
@@ -164,6 +167,8 @@ export const PrayerTimesDisplay = ({
   styles = {},
   location: initialLocation = {},
   showSettings = false,
+  showJumuah = false,
+  showSunrise = false,
 }: PrayerTimesProps) => {
   const [location, setLocation] = useState(initialLocation);
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
@@ -379,8 +384,13 @@ export const PrayerTimesDisplay = ({
 
   const prayerTimes = [
     { name: "Fajr", time: prayerData.timings.Fajr, icon: Moon },
-    { name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise },
+    ...(showSunrise
+      ? [{ name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise }]
+      : []),
     { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: Sun },
+    ...(showJumuah && currentTime.getDay() === 5
+      ? [{ name: "Jumu'ah", time: "13:00", icon: Sun }]
+      : []),
     { name: "Asr", time: prayerData.timings.Asr, icon: Sun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: Sunset },
     { name: "Isha", time: prayerData.timings.Isha, icon: Moon },
@@ -406,8 +416,11 @@ export const PrayerTimesDisplay = ({
   };
   return (
     <Card className="w-full" style={containerStyles}>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
+      <CardHeader style={styles.header}>
+        <CardTitle
+          className="flex items-center justify-between"
+          style={styles.title}
+        >
           <span>{showNextOnly ? "Next Prayer" : "Prayer Times"}</span>
           <div className="flex items-center text-sm font-normal">
             <Clock className="mr-2 h-4 w-4" />
@@ -434,13 +447,17 @@ export const PrayerTimesDisplay = ({
                   <div
                     key={nextPrayer.name}
                     className="flex flex-col items-center space-y-2 rounded-lg bg-muted p-4"
+                    style={styles.timeBlock}
                   >
                     {React.createElement(nextPrayer.icon, {
                       size: 24,
                       className: "mb-2",
                     })}
                     <h3 className="font-medium">{nextPrayer.name}</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p
+                      className="text-sm text-muted-foreground"
+                      style={styles.time}
+                    >
                       {nextPrayer.time}
                     </p>
                   </div>
@@ -450,13 +467,19 @@ export const PrayerTimesDisplay = ({
                 <div
                   key={name}
                   className="flex flex-col items-center space-y-2 rounded-lg bg-muted p-4"
+                  style={styles.timeBlock}
                 >
                   {React.createElement(icon, {
                     size: 24,
                     className: "mb-2",
                   })}
                   <h3 className="font-medium">{name}</h3>
-                  <p className="text-sm text-muted-foreground">{time}</p>
+                  <p
+                    className="text-sm text-muted-foreground"
+                    style={styles.time}
+                  >
+                    {time}
+                  </p>
                 </div>
               ))}
         </div>

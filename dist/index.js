@@ -2546,8 +2546,8 @@ function cn(...inputs) {
 }
 
 // src/components/prayer-times.tsx
-var import_react = __toESM(require("react"));
 var import_lucide_react = require("lucide-react");
+var import_react = __toESM(require("react"));
 var import_jsx_runtime = require("react/jsx-runtime");
 var calculationMethods = [
   { label: "Jafari", value: 0 },
@@ -2582,6 +2582,69 @@ function Skeleton(_a) {
     }, props)
   );
 }
+var Card = import_react.default.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn(
+        "rounded-xl border bg-card text-card-foreground shadow",
+        className
+      )
+    }, props)
+  );
+});
+Card.displayName = "Card";
+var CardHeader = import_react.default.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn("flex flex-col space-y-1.5 p-6", className)
+    }, props)
+  );
+});
+CardHeader.displayName = "CardHeader";
+var CardTitle = import_react.default.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    "h3",
+    __spreadValues({
+      ref,
+      className: cn("font-semibold leading-none tracking-tight", className)
+    }, props)
+  );
+});
+CardTitle.displayName = "CardTitle";
+var CardDescription = import_react.default.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    "p",
+    __spreadValues({
+      ref,
+      className: cn("text-sm text-muted-foreground", className)
+    }, props)
+  );
+});
+CardDescription.displayName = "CardDescription";
+var CardContent = import_react.default.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", __spreadValues({ ref, className: cn("p-6 pt-0", className) }, props));
+});
+CardContent.displayName = "CardContent";
+var CardFooter = import_react.default.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn("flex items-center p-6 pt-0", className)
+    }, props)
+  );
+});
+CardFooter.displayName = "CardFooter";
 var PrayerTimesSkeleton = ({ minimized = false }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "space-y-4 p-5", children: [
   /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Skeleton, { className: "h-8 w-[150px]" }),
   /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
@@ -2599,9 +2662,6 @@ var PrayerTimesSkeleton = ({ minimized = false }) => /* @__PURE__ */ (0, import_
   )
 ] });
 var PrayerTimesDisplay = ({
-  layout = "horizontal",
-  latitude,
-  longitude,
   minimized = false,
   showNextOnly = false,
   styles = {},
@@ -2613,6 +2673,7 @@ var PrayerTimesDisplay = ({
   const [prayerData, setPrayerData] = (0, import_react.useState)(null);
   const [loading, setLoading] = (0, import_react.useState)(true);
   const [error, setError] = (0, import_react.useState)(null);
+  const [currentTime, setCurrentTime] = (0, import_react.useState)(/* @__PURE__ */ new Date());
   const getCurrentPosition = () => {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
@@ -2704,6 +2765,12 @@ var PrayerTimesDisplay = ({
     };
     fetchPrayerTimes();
   }, [coordinates, location.method, location.school]);
+  (0, import_react.useEffect)(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(/* @__PURE__ */ new Date());
+    }, 6e4);
+    return () => clearInterval(timer);
+  }, []);
   const Settings = () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
     "div",
     {
@@ -2776,64 +2843,68 @@ var PrayerTimesDisplay = ({
   ];
   const getNextPrayer = (prayerTimes2) => {
     const now = /* @__PURE__ */ new Date();
-    const currentTime = now.getHours() * 60 + now.getMinutes();
+    const currentTime2 = now.getHours() * 60 + now.getMinutes();
     for (const prayer of prayerTimes2) {
       const [hours, minutes] = prayer.time.split(":").map(Number);
       const prayerTime = hours * 60 + minutes;
-      if (prayerTime > currentTime) {
+      if (prayerTime > currentTime2) {
         return prayer;
       }
     }
     return prayerTimes2[0];
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: containerStyles, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: styles.header, children: showNextOnly ? "Next Prayer" : "Prayer Times" }),
-    showSettings && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, {}),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          display: "grid",
-          gridTemplateColumns: minimized || showNextOnly ? "1fr" : "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "1rem"
-        },
-        children: showNextOnly ? (() => {
-          const nextPrayer = getNextPrayer(prayerTimes);
-          return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, { className: "w-full", style: containerStyles, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: showNextOnly ? "Next Prayer" : "Prayer Times" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center text-sm font-normal", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_lucide_react.Clock, { className: "mr-2 h-4 w-4" }),
+        currentTime.toLocaleTimeString()
+      ] })
+    ] }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [
+      showSettings && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, {}),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        "div",
+        {
+          className: cn(
+            "grid gap-4",
+            minimized || showNextOnly ? "grid-cols-1" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
+          ),
+          children: showNextOnly ? (() => {
+            const nextPrayer = getNextPrayer(prayerTimes);
+            return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+              "div",
+              {
+                className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4",
+                children: [
+                  import_react.default.createElement(nextPrayer.icon, {
+                    size: 24,
+                    className: "mb-2"
+                  }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: "font-medium", children: nextPrayer.name }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm text-muted-foreground", children: nextPrayer.time })
+                ]
+              },
+              nextPrayer.name
+            );
+          })() : prayerTimes.map(({ name, time, icon }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
             "div",
             {
-              style: __spreadValues({
-                padding: "1rem",
-                backgroundColor: "#f5f5f5",
-                borderRadius: "4px",
-                textAlign: "center"
-              }, styles.timeBlock),
+              className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4",
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { margin: "0 0 0.5rem 0" }, children: nextPrayer.name }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: __spreadValues({ margin: 0, fontSize: "1.2rem" }, styles.time), children: nextPrayer.time })
+                import_react.default.createElement(icon, {
+                  size: 24,
+                  className: "mb-2"
+                }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: "font-medium", children: name }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm text-muted-foreground", children: time })
               ]
             },
-            nextPrayer.name
-          );
-        })() : prayerTimes.map(({ name, time, icon }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-          "div",
-          {
-            style: __spreadValues({
-              padding: "1rem",
-              backgroundColor: "#f5f5f5",
-              borderRadius: "4px",
-              textAlign: "center"
-            }, styles.timeBlock),
-            children: [
-              import_react.default.createElement(icon, { size: 24, style: { margin: "0 auto 0.5rem" } }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { margin: "0 0 0.5rem 0" }, children: name }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: __spreadValues({ margin: 0, fontSize: "1.2rem" }, styles.time), children: time })
-            ]
-          },
-          name
-        ))
-      }
-    )
+            name
+          ))
+        }
+      )
+    ] })
   ] });
 };
 
