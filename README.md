@@ -83,16 +83,5 @@ Key Features:
 ### Installation
 
 ```bash
-npm install react-islamic-prayer-times
-```
-
-Add the following to your tailwind.config.js:
-
-```js
-module.exports = {
-  content: [
-    // ... your other content paths
-    "node_modules/react-islamic-prayer-times/**/*.{js,ts,jsx,tsx}",
-  ],
-};
+yarn add react-islamic-prayer-times
 ```
