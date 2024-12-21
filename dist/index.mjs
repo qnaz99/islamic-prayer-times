@@ -193,37 +193,17 @@ function usePrayerTimes(latitude, longitude) {
   return { prayerTimes, isLoading, error };
 }
 
-// src/styles/base.ts
-var styles = {
-  card: {
-    base: "rounded-lg border bg-white shadow-sm p-4",
-    header: "space-y-1.5 p-4",
-    title: "text-lg font-semibold",
-    content: "p-4 pt-0"
-  },
-  alert: {
-    base: "relative w-full rounded-lg border p-4",
-    description: "text-sm [&:has(>_p)]:opacity-90"
-  },
-  skeleton: "animate-pulse rounded-md bg-muted",
-  prayerTimes: {
-    container: {
-      vertical: "flex flex-col space-y-4",
-      horizontal: "grid grid-cols-2 md:grid-cols-5 gap-4"
-    },
-    timeBlock: "flex items-center justify-between p-4 rounded-lg border bg-white",
-    label: "text-sm font-medium text-gray-600",
-    time: "text-base font-semibold"
-  }
-};
-
-// src/components/ui/alert.tsx
-import * as React from "react";
+// lib/utils.ts
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
 
 // node_modules/class-variance-authority/dist/index.mjs
-import { clsx } from "clsx";
+import { clsx as clsx2 } from "clsx";
 var falsyToString = (value) => typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
-var cx = clsx;
+var cx = clsx2;
 var cva = (base, config) => (props) => {
   var _config_compoundVariants;
   if ((config === null || config === void 0 ? void 0 : config.variants) == null) return cx(base, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
@@ -257,15 +237,111 @@ var cva = (base, config) => (props) => {
   return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
 };
 
-// lib/utils.ts
-import { clsx as clsx2 } from "clsx";
-import { twMerge } from "tailwind-merge";
-function cn(...inputs) {
-  return twMerge(clsx2(inputs));
-}
+// src/components/prayer-times.tsx
+import * as React from "react";
 
-// src/components/ui/alert.tsx
-import { jsx } from "react/jsx-runtime";
+// src/styles/base.ts
+var styles = {
+  card: {
+    base: "rounded-lg border bg-white shadow-sm p-4",
+    header: "space-y-1.5 p-4",
+    title: "text-lg font-semibold",
+    content: "p-4 pt-0"
+  },
+  alert: {
+    base: "relative w-full rounded-lg border p-4",
+    description: "text-sm [&:has(>_p)]:opacity-90"
+  },
+  skeleton: "animate-pulse rounded-md bg-muted",
+  prayerTimes: {
+    container: {
+      vertical: "flex flex-col space-y-4",
+      horizontal: "grid grid-cols-2 md:grid-cols-5 gap-4"
+    },
+    timeBlock: "flex items-center justify-between p-4 rounded-lg border bg-white",
+    label: "text-sm font-medium text-gray-600",
+    time: "text-base font-semibold"
+  }
+};
+
+// src/components/prayer-times.tsx
+import { jsx, jsxs } from "react/jsx-runtime";
+function Skeleton(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      className: cn("animate-pulse rounded-md bg-primary/10", className)
+    }, props)
+  );
+}
+var Card = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn(
+        "rounded-xl border bg-card text-card-foreground shadow",
+        className
+      )
+    }, props)
+  );
+});
+Card.displayName = "Card";
+var CardHeader = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn("flex flex-col space-y-1.5 p-6", className)
+    }, props)
+  );
+});
+CardHeader.displayName = "CardHeader";
+var CardTitle = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn("font-semibold leading-none tracking-tight", className)
+    }, props)
+  );
+});
+CardTitle.displayName = "CardTitle";
+var CardDescription = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn("text-sm text-muted-foreground", className)
+    }, props)
+  );
+});
+CardDescription.displayName = "CardDescription";
+var CardContent = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx("div", __spreadValues({ ref, className: cn("p-6 pt-0", className) }, props));
+});
+CardContent.displayName = "CardContent";
+var CardFooter = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn("flex items-center p-6 pt-0", className)
+    }, props)
+  );
+});
+CardFooter.displayName = "CardFooter";
 var alertVariants = cva(
   "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
   {
@@ -314,25 +390,6 @@ var AlertDescription = React.forwardRef((_a, ref) => {
   );
 });
 AlertDescription.displayName = "AlertDescription";
-
-// src/components/ui/skeleton.tsx
-import { jsx as jsx2 } from "react/jsx-runtime";
-function Skeleton(_a) {
-  var _b = _a, {
-    className
-  } = _b, props = __objRest(_b, [
-    "className"
-  ]);
-  return /* @__PURE__ */ jsx2(
-    "div",
-    __spreadValues({
-      className: cn("animate-pulse rounded-md bg-primary/10", className)
-    }, props)
-  );
-}
-
-// src/components/prayer-times.tsx
-import { jsx as jsx3, jsxs } from "react/jsx-runtime";
 var PrayerTimes = ({
   layout = "horizontal",
   latitude,
@@ -341,95 +398,21 @@ var PrayerTimes = ({
   const { prayerTimes, isLoading, error } = usePrayerTimes(latitude, longitude);
   const containerStyle = styles.prayerTimes.container[layout];
   if (isLoading) {
-    return /* @__PURE__ */ jsx3("div", { className: containerStyle, children: [...Array(5)].map((_, i) => /* @__PURE__ */ jsx3(Skeleton, { className: "h-20 w-full" }, i)) });
+    return /* @__PURE__ */ jsx("div", { className: containerStyle, children: [...Array(5)].map((_, i) => /* @__PURE__ */ jsx(Skeleton, { className: "h-20 w-full" }, i)) });
   }
   if (error) {
-    return /* @__PURE__ */ jsx3(Alert, { children: /* @__PURE__ */ jsx3(AlertDescription, { children: error }) });
+    return /* @__PURE__ */ jsx(Alert, { children: /* @__PURE__ */ jsx(AlertDescription, { children: error }) });
   }
-  return /* @__PURE__ */ jsx3("div", { className: containerStyle, children: prayerTimes.map((prayer) => /* @__PURE__ */ jsxs("div", { className: styles.prayerTimes.timeBlock, children: [
+  return /* @__PURE__ */ jsx("div", { className: containerStyle, children: prayerTimes.map((prayer) => /* @__PURE__ */ jsxs("div", { className: styles.prayerTimes.timeBlock, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-      /* @__PURE__ */ jsx3(prayer.icon, { className: "h-4 w-4" }),
-      /* @__PURE__ */ jsx3("span", { className: styles.prayerTimes.label, children: prayer.name })
+      /* @__PURE__ */ jsx(prayer.icon, { className: "h-4 w-4" }),
+      /* @__PURE__ */ jsx("span", { className: styles.prayerTimes.label, children: prayer.name })
     ] }),
-    /* @__PURE__ */ jsx3("span", { className: styles.prayerTimes.time, children: prayer.time })
+    /* @__PURE__ */ jsx("span", { className: styles.prayerTimes.time, children: prayer.time })
   ] }, prayer.name)) });
 };
-
-// src/components/ui/card.tsx
-import * as React2 from "react";
-import { jsx as jsx4 } from "react/jsx-runtime";
-var Card = React2.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx4(
-    "div",
-    __spreadValues({
-      ref,
-      className: cn(
-        "rounded-xl border bg-card text-card-foreground shadow",
-        className
-      )
-    }, props)
-  );
-});
-Card.displayName = "Card";
-var CardHeader = React2.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx4(
-    "div",
-    __spreadValues({
-      ref,
-      className: cn("flex flex-col space-y-1.5 p-6", className)
-    }, props)
-  );
-});
-CardHeader.displayName = "CardHeader";
-var CardTitle = React2.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx4(
-    "div",
-    __spreadValues({
-      ref,
-      className: cn("font-semibold leading-none tracking-tight", className)
-    }, props)
-  );
-});
-CardTitle.displayName = "CardTitle";
-var CardDescription = React2.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx4(
-    "div",
-    __spreadValues({
-      ref,
-      className: cn("text-sm text-muted-foreground", className)
-    }, props)
-  );
-});
-CardDescription.displayName = "CardDescription";
-var CardContent = React2.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx4("div", __spreadValues({ ref, className: cn("p-6 pt-0", className) }, props));
-});
-CardContent.displayName = "CardContent";
-var CardFooter = React2.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx4(
-    "div",
-    __spreadValues({
-      ref,
-      className: cn("flex items-center p-6 pt-0", className)
-    }, props)
-  );
-});
-CardFooter.displayName = "CardFooter";
 export {
-  Alert,
-  AlertDescription,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
   PrayerTimes,
-  Skeleton,
   cn,
   usePrayerTimes
 };

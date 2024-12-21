@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Card styles */
+  .prayer-card {
+    @apply rounded-xl border bg-card text-card-foreground shadow w-full;
+  }
+
+  .prayer-card-header {
+    @apply flex flex-col space-y-1.5 p-6;
+  }
+
+  .prayer-card-title {
+    @apply flex items-center justify-between font-semibold leading-none tracking-tight;
+  }
+
+  .prayer-card-content {
+    @apply p-6 pt-0;
+  }
+
+  /* Layout styles */
+  .prayer-grid-horizontal {
+    @apply grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5;
+  }
+
+  .prayer-grid-vertical {
+    @apply space-y-4;
+  }
+
+  /* Prayer time block styles */
+  .prayer-time-block-horizontal {
+    @apply flex flex-col items-center space-y-2 rounded-lg bg-muted p-4;
+  }
+
+  .prayer-time-block-vertical {
+    @apply flex items-center justify-between rounded-lg bg-muted p-4;
+  }
+
+  /* Text styles */
+  .prayer-name {
+    @apply font-medium;
+  }
+
+  .prayer-time {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .current-time {
+    @apply flex items-center text-sm font-normal;
+  }
+
+  /* Loading skeleton styles */
+  .skeleton-block {
+    @apply animate-pulse rounded-md bg-primary/10;
+  }
+
+  .skeleton-icon {
+    @apply h-8 w-8 rounded-full;
+  }
+
+  .skeleton-text {
+    @apply h-4 w-20;
+  }
+
+  /* Alert styles */
+  .prayer-alert {
+    @apply relative w-full rounded-lg border px-4 py-3 text-sm border-destructive/50 text-destructive;
+  }
+} 

@@ -1,26 +1,44 @@
 "use client";
 
+import { cva } from "class-variance-authority";
+import { AlertCircle, Clock } from "lucide-react";
+import React, { useEffect, useState } from "react";
+
+// Utility function to combine class names
 import { usePrayerTimes } from "@/hooks/use-prayer-times";
-import { cn } from "@/lib/utils";
 import { PrayerTimesProps } from "@/types/prayer-times";
-import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
-import { styles } from "../styles/base";
+const cn = (...classes: (string | undefined)[]) =>
+  classes.filter(Boolean).join(" ");
 
-function Skeleton({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("animate-pulse rounded-md bg-primary/10", className)}
-      {...props}
-    />
-  );
-}
+// Alert Component
+const alertVariants = cva(
+  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
+  {
+    variants: {
+      variant: {
+        default: "bg-white text-gray-900 border-gray-200",
+        destructive: "border-red-500/50 text-red-600 dark:border-red-500",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
-export { Skeleton };
+const Alert = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { variant?: "default" | "destructive" }
+>(({ className, variant = "default", ...props }, ref) => (
+  <div
+    ref={ref}
+    role="alert"
+    className={cn(alertVariants({ variant }), className)}
+    {...props}
+  />
+));
 
+// Card Components
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -28,13 +46,12 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-xl border bg-card text-card-foreground shadow",
+      "rounded-xl border border-gray-200 bg-white text-gray-900 shadow",
       className
     )}
     {...props}
   />
 ));
-Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<
   HTMLDivElement,
@@ -46,7 +63,6 @@ const CardHeader = React.forwardRef<
     {...props}
   />
 ));
-CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<
   HTMLDivElement,
@@ -58,19 +74,6 @@ const CardTitle = React.forwardRef<
     {...props}
   />
 ));
-CardTitle.displayName = "CardTitle";
-
-const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-));
-CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef<
   HTMLDivElement,
@@ -78,119 +81,111 @@ const CardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
 ));
-CardContent.displayName = "CardContent";
 
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+// Skeleton Component
+const Skeleton = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
+    className={cn("animate-pulse rounded-md bg-gray-200", className)}
     {...props}
   />
-));
-CardFooter.displayName = "CardFooter";
-
-export {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-};
-
-const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
-  {
-    variants: {
-      variant: {
-        default: "bg-background text-foreground",
-        destructive:
-          "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
 );
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn(alertVariants({ variant }), className)}
-    {...props}
-  />
-));
-Alert.displayName = "Alert";
-
-const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h5
-    ref={ref}
-    className={cn("mb-1 font-medium leading-none tracking-tight", className)}
-    {...props}
-  />
-));
-AlertTitle.displayName = "AlertTitle";
-
-const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm [&_p]:leading-relaxed", className)}
-    {...props}
-  />
-));
-AlertDescription.displayName = "AlertDescription";
-
+// Main PrayerTimes Component
 export const PrayerTimes: React.FC<PrayerTimesProps> = ({
   layout = "horizontal",
   latitude,
   longitude,
+  className,
 }) => {
   const { prayerTimes, isLoading, error } = usePrayerTimes(latitude, longitude);
-  const containerStyle = styles.prayerTimes.container[layout];
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  if (isLoading) {
-    return (
-      <div className={containerStyle}>
-        {[...Array(5)].map((_, i) => (
-          <Skeleton key={i} className="h-20 w-full" />
-        ))}
-      </div>
-    );
-  }
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   if (error) {
     return (
-      <Alert>
-        <AlertDescription>{error}</AlertDescription>
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <div>{error}</div>
       </Alert>
     );
   }
 
   return (
-    <div className={containerStyle}>
-      {prayerTimes.map((prayer) => (
-        <div key={prayer.name} className={styles.prayerTimes.timeBlock}>
-          <div className="flex items-center gap-2">
-            <prayer.icon className="h-4 w-4" />
-            <span className={styles.prayerTimes.label}>{prayer.name}</span>
+    <Card className={cn("w-full", className)}>
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <span>Prayer Times</span>
+          <div className="flex items-center text-sm font-normal">
+            <Clock className="mr-2 h-4 w-4" />
+            {currentTime.toLocaleTimeString()}
           </div>
-          <span className={styles.prayerTimes.time}>{prayer.time}</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div
+          className={
+            layout === "horizontal"
+              ? "grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5"
+              : "space-y-4"
+          }
+        >
+          {isLoading
+            ? Array(5)
+                .fill(0)
+                .map((_, i) =>
+                  layout === "horizontal" ? (
+                    <div
+                      key={i}
+                      className="flex flex-col items-center space-y-2"
+                    >
+                      <Skeleton className="h-8 w-8 rounded-full" />
+                      <Skeleton className="h-4 w-20" />
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                  ) : (
+                    <div key={i} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <Skeleton className="h-8 w-8 rounded-full" />
+                        <Skeleton className="h-4 w-20" />
+                      </div>
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                  )
+                )
+            : prayerTimes.map((prayer) =>
+                layout === "horizontal" ? (
+                  <div
+                    key={prayer.name}
+                    className="flex flex-col items-center space-y-2 rounded-lg bg-gray-50 p-4"
+                  >
+                    <prayer.icon className="h-8 w-8" />
+                    <span className="font-medium">{prayer.name}</span>
+                    <span className="text-sm text-gray-500">{prayer.time}</span>
+                  </div>
+                ) : (
+                  <div
+                    key={prayer.name}
+                    className="flex items-center justify-between rounded-lg bg-gray-50 p-4"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <prayer.icon className="h-8 w-8" />
+                      <span className="font-medium">{prayer.name}</span>
+                    </div>
+                    <span className="text-sm text-gray-500">{prayer.time}</span>
+                  </div>
+                )
+              )}
         </div>
-      ))}
-    </div>
+      </CardContent>
+    </Card>
   );
 };

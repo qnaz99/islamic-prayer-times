@@ -1,8 +1,4 @@
 import * as React$1 from 'react';
-import React__default from 'react';
-import * as class_variance_authority_dist_types from 'class-variance-authority/dist/types';
-import { VariantProps } from 'class-variance-authority';
-import * as react_jsx_runtime from 'react/jsx-runtime';
 import { ClassValue } from 'clsx';
 
 interface PrayerTimesProps {
@@ -110,19 +106,7 @@ interface AladhanResponse {
     };
 }
 
-declare const PrayerTimes: React__default.FC<PrayerTimesProps>;
-
-declare const Alert: React$1.ForwardRefExoticComponent<React$1.HTMLAttributes<HTMLDivElement> & VariantProps<(props?: ({
-    variant?: "default" | "destructive" | null | undefined;
-} & class_variance_authority_dist_types.ClassProp) | undefined) => string> & React$1.RefAttributes<HTMLDivElement>>;
-declare const AlertDescription: React$1.ForwardRefExoticComponent<React$1.HTMLAttributes<HTMLParagraphElement> & React$1.RefAttributes<HTMLParagraphElement>>;
-
-declare const Card: React$1.ForwardRefExoticComponent<React$1.HTMLAttributes<HTMLDivElement> & React$1.RefAttributes<HTMLDivElement>>;
-declare const CardHeader: React$1.ForwardRefExoticComponent<React$1.HTMLAttributes<HTMLDivElement> & React$1.RefAttributes<HTMLDivElement>>;
-declare const CardTitle: React$1.ForwardRefExoticComponent<React$1.HTMLAttributes<HTMLDivElement> & React$1.RefAttributes<HTMLDivElement>>;
-declare const CardContent: React$1.ForwardRefExoticComponent<React$1.HTMLAttributes<HTMLDivElement> & React$1.RefAttributes<HTMLDivElement>>;
-
-declare function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): react_jsx_runtime.JSX.Element;
+declare const PrayerTimes: React$1.FC<PrayerTimesProps>;
 
 declare function cn(...inputs: ClassValue[]): string;
 
@@ -132,4 +116,4 @@ declare function usePrayerTimes(latitude?: number, longitude?: number): {
     error: string | null;
 };
 
-export { type AladhanResponse, Alert, AlertDescription, Card, CardContent, CardHeader, CardTitle, type PrayerTime, PrayerTimes, type PrayerTimesProps, Skeleton, cn, usePrayerTimes };
+export { type AladhanResponse, type PrayerTime, PrayerTimes, type PrayerTimesProps, cn, usePrayerTimes };
