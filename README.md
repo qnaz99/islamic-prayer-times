@@ -45,28 +45,28 @@ yarn add react-prayer-times
 ### Basic Usage
 
 ```jsx
-import PrayerTimes from "react-prayer-times";
+import PrayerTimesDisplay from "react-prayer-times";
 
 // Horizontal Layout (default)
 function App() {
-  return <PrayerTimes />;
+  return <PrayerTimesDisplay />;
 }
 
 // Vertical Layout
 function App() {
-  return <PrayerTimes layout="vertical" />;
+  return <PrayerTimesDisplay layout="vertical" />;
 }
 
 // Minimized View (only next prayer)
 function App() {
-  return <PrayerTimes showNextOnly={true} />;
+  return <PrayerTimesDisplay showNextOnly={true} />;
 }
 ```
 
 ### With Custom Location
 
 ```jsx
-<PrayerTimes
+<PrayerTimesDisplay
   location={{
     city: "London",
     country: "UK",
@@ -80,22 +80,22 @@ function App() {
 
 ```jsx
 // Minimized view with only the next prayer
-<PrayerTimes
+<PrayerTimesDisplay
   minimized={true}
   showNextOnly={true}
 />
 
 // Full view with only the next prayer
-<PrayerTimes showNextOnly={true} />
+<PrayerTimesDisplay showNextOnly={true} />
 
 // Minimized view with all prayers
-<PrayerTimes minimized={true} />
+<PrayerTimesDisplay minimized={true} />
 ```
 
 ### With Custom Styles
 
 ```jsx
-<PrayerTimes
+<PrayerTimesDisplay
   styles={{
     container: {
       backgroundColor: "#f8f9fa",
@@ -138,6 +138,10 @@ interface LocationConfig {
 }
 ```
 
+## Compatibility
+
+Supports React versions 16.8.0 through 19.x.x
+
 ## Built With
 
 - React
@@ -151,4 +155,4 @@ MIT © [Your Name]
 ## Acknowledgments
 
 - [Aladhan API](https://aladhan.com/prayer-times-api) for providing prayer times data
-- [React Icons](https://react-icons.github.io/react-icons/) for the prayer time icons
+- [Lucide Icons](https://lucide.dev/) for the prayer time icons
