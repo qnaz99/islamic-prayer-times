@@ -16,6 +16,7 @@ interface PrayerTimesProps$1 {
     styles?: {
         container?: React$1.CSSProperties;
         header?: React$1.CSSProperties;
+        timeBlockContainer?: React$1.CSSProperties;
         timeBlock?: React$1.CSSProperties;
         time?: React$1.CSSProperties;
         select?: React$1.CSSProperties;

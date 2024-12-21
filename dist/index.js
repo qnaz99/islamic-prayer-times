@@ -2880,6 +2880,7 @@ var PrayerTimesDisplay = ({
             "grid gap-4",
             minimized || showNextOnly ? "grid-cols-1" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
           ),
+          style: styles.timeBlockContainer,
           children: showNextOnly ? (() => {
             const nextPrayer = getNextPrayer(prayerTimes);
             return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(

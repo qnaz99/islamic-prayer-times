@@ -31,6 +31,10 @@ A modern React component for displaying Islamic prayer times with support for bo
 - 📱 Responsive design
 - ♿ Accessibility support
 - 💅 Customizable styling
+- 🕌 Optional Jumu'ah prayer display
+- ☀️ Optional Sunrise time display
+- ⚙️ Configurable calculation methods
+- 🎭 Multiple madhab options
 
 ## Installation
 
@@ -114,6 +118,33 @@ function App() {
 />
 ```
 
+### With All Options
+
+```jsx
+<PrayerTimesDisplay
+  layout="horizontal"
+  minimized={false}
+  showNextOnly={false}
+  showSettings={true}
+  showJumuah={true}
+  showSunrise={true}
+  styles={{
+    container: { backgroundColor: "#f8f9fa" },
+    header: { backgroundColor: "#f0f0f0" },
+    timeBlockContainer: { padding: "20px", gap: "2rem" },
+    timeBlock: { backgroundColor: "#fff" },
+    time: { color: "#333", fontWeight: "bold" },
+    title: { color: "#000" }
+  }}
+  location={{
+    city: "London",
+    country: "UK",
+    method: 2, // ISNA
+    school: 0  // Shafi
+  }}
+/>
+```
+
 ## Props
 
 | Prop           | Type                           | Default        | Description               |
@@ -124,6 +155,9 @@ function App() {
 | `styles`       | `object`                       | `{}`           | Custom styles             |
 | `location`     | `object`                       | `{}`           | Location config           |
 | `showSettings` | `boolean`                      | `false`        | Show settings panel       |
+| `showJumuah`   | `boolean`                      | `false`        | Show Jumu'ah prayer on Fridays |
+| `showSunrise`  | `boolean`                      | `false`        | Show Sunrise time |
+| `styles.timeBlockContainer` | `object` | `{}` | Styles for the prayer times grid container |
 
 ### Location Configuration
 
