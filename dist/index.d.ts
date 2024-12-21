@@ -1,7 +1,8 @@
-import * as react_jsx_runtime from 'react/jsx-runtime';
-import * as class_variance_authority_dist_types from 'class-variance-authority/dist/types';
 import * as React$1 from 'react';
+import React__default from 'react';
+import * as class_variance_authority_dist_types from 'class-variance-authority/dist/types';
 import { VariantProps } from 'class-variance-authority';
+import * as react_jsx_runtime from 'react/jsx-runtime';
 import { ClassValue } from 'clsx';
 
 interface PrayerTimesProps {
@@ -109,7 +110,7 @@ interface AladhanResponse {
     };
 }
 
-declare const PrayerTimes: ({ layout, latitude, longitude, className, }: PrayerTimesProps) => react_jsx_runtime.JSX.Element;
+declare const PrayerTimes: React__default.FC<PrayerTimesProps>;
 
 declare const Alert: React$1.ForwardRefExoticComponent<React$1.HTMLAttributes<HTMLDivElement> & VariantProps<(props?: ({
     variant?: "default" | "destructive" | null | undefined;
