@@ -32,6 +32,15 @@ var __objRest = (source, exclude) => {
 
 // src/components/prayer-times.tsx
 import { useEffect, useState } from "react";
+
+// lib/utils.ts
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+// src/components/prayer-times.tsx
 import { jsx, jsxs } from "react/jsx-runtime";
 var calculationMethods = [
   { label: "Jafari", value: 0 },
@@ -47,6 +56,29 @@ var schools = [
   { label: "Shafi", value: 0 },
   { label: "Hanafi", value: 1 }
 ];
+function Skeleton(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      className: cn("animate-pulse rounded-md bg-primary/10", className)
+    }, props)
+  );
+}
+var PrayerTimesSkeleton = ({ minimized = false }) => /* @__PURE__ */ jsxs("div", { className: "space-y-4 p-5", children: [
+  /* @__PURE__ */ jsx(Skeleton, { className: "h-8 w-[150px]" }),
+  /* @__PURE__ */ jsx("div", { className: cn(
+    "grid gap-4",
+    minimized ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3"
+  ), children: [...Array(6)].map((_, index) => /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
+    /* @__PURE__ */ jsx(Skeleton, { className: "h-6 w-[100px] mx-auto" }),
+    /* @__PURE__ */ jsx(Skeleton, { className: "h-7 w-[80px] mx-auto" })
+  ] }, index)) })
+] });
 var PrayerTimes = ({
   minimized = false,
   styles = {},
@@ -208,7 +240,7 @@ var PrayerTimes = ({
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     width: minimized ? "300px" : "100%"
   }, styles.container);
-  if (loading) return /* @__PURE__ */ jsx("div", { children: "Loading prayer times..." });
+  if (loading) return /* @__PURE__ */ jsx(PrayerTimesSkeleton, { minimized });
   if (error) return /* @__PURE__ */ jsx("div", { children: error });
   if (!prayerData) return null;
   const prayerTimes = [
@@ -251,13 +283,6 @@ var PrayerTimes = ({
   ] });
 };
 var prayer_times_default = PrayerTimes;
-
-// lib/utils.ts
-import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
 
 // node_modules/lucide-react/dist/esm/createLucideIcon.js
 import { forwardRef as forwardRef2, createElement as createElement2 } from "react";

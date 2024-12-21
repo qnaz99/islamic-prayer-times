@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 
 // Constants and types
 const calculationMethods = [
@@ -46,36 +45,6 @@ interface PrayerTimesProps {
   location?: LocationConfig;
   showSettings?: boolean;
 }
-
-function Skeleton({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("animate-pulse rounded-md bg-primary/10", className)}
-      {...props}
-    />
-  )
-}
-
-const PrayerTimesSkeleton = ({ minimized = false }) => (
-  <div className="space-y-4 p-5">
-    <Skeleton className="h-8 w-[150px]" />
-    
-    <div className={cn(
-      "grid gap-4",
-      minimized ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3"
-    )}>
-      {[...Array(6)].map((_, index) => (
-        <div key={index} className="space-y-2">
-          <Skeleton className="h-6 w-[100px] mx-auto" />
-          <Skeleton className="h-7 w-[80px] mx-auto" />
-        </div>
-      ))}
-    </div>
-  </div>
-);
 
 export const PrayerTimes: React.FC<PrayerTimesProps> = ({
   minimized = false,
@@ -281,7 +250,7 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({
     ...styles.container,
   };
 
-  if (loading) return <PrayerTimesSkeleton minimized={minimized} />;
+  if (loading) return <div>Loading prayer times...</div>;
   if (error) return <div>{error}</div>;
   if (!prayerData) return null;
 
