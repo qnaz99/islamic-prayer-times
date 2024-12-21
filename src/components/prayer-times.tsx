@@ -1,27 +1,46 @@
 "use client";
 
-import { Alert, AlertDescription } from "@/src/components/ui/alert";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card";
-import { Skeleton } from "@/src/components/ui/skeleton";
 import { usePrayerTimes } from "@/hooks/use-prayer-times";
-import { cn } from "@/lib/utils";
+import { Alert, AlertDescription } from "@/src/components/ui/alert";
 import { PrayerTimesProps } from "@/types/prayer-times";
 import { AlertCircle, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function PrayerTimes({
+export const PrayerTimes = ({
   layout = "horizontal",
   latitude,
   longitude,
   className,
-}: PrayerTimesProps) {
+}: PrayerTimesProps) => {
   const { prayerTimes, isLoading, error } = usePrayerTimes(latitude, longitude);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  const baseCardStyle = {
+    borderRadius: "0.5rem",
+    border: "1px solid #e2e8f0",
+    backgroundColor: "white",
+    padding: "1rem",
+    boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+  };
+
+  const timeBlockStyle = {
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: "center",
+    gap: "0.5rem",
+  };
+
+  const labelStyle = {
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    color: "#64748b",
+  };
+
+  const timeStyle = {
+    fontSize: "1rem",
+    fontWeight: 600,
+    color: "#1e293b",
+  };
 
   // Update current time every minute
   useEffect(() => {
@@ -43,90 +62,155 @@ export function PrayerTimes({
 
   if (layout === "horizontal") {
     return (
-      <Card className={cn("w-full", className)}>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Prayer Times</span>
-            <div className="flex items-center text-sm font-normal">
-              <Clock className="mr-2 h-4 w-4" />
-              {currentTime.toLocaleTimeString()}
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-            {isLoading
-              ? Array(5)
-                  .fill(0)
-                  .map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col items-center space-y-2"
-                    >
-                      <Skeleton className="h-8 w-8 rounded-full" />
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-4 w-16" />
-                    </div>
-                  ))
-              : prayerTimes.map((prayer) => (
-                  <div
-                    key={prayer.name}
-                    className="flex flex-col items-center space-y-2 rounded-lg bg-muted p-4"
-                  >
-                    <prayer.icon className="h-8 w-8" />
-                    <span className="font-medium">{prayer.name}</span>
-                    <span className="text-sm text-muted-foreground">
-                      {prayer.time}
-                    </span>
-                  </div>
-                ))}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
-    <Card className={cn("w-full", className)}>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>Prayer Times</span>
-          <div className="flex items-center text-sm font-normal">
+      <div style={baseCardStyle}>
+        <div style={timeBlockStyle}>
+          <span style={labelStyle}>Prayer Times</span>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              fontSize: "0.875rem",
+              fontWeight: 400,
+            }}
+          >
             <Clock className="mr-2 h-4 w-4" />
             {currentTime.toLocaleTimeString()}
           </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+            gap: "1rem",
+          }}
+        >
           {isLoading
             ? Array(5)
                 .fill(0)
                 .map((_, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <Skeleton className="h-8 w-8 rounded-full" />
-                      <Skeleton className="h-4 w-20" />
-                    </div>
-                    <Skeleton className="h-4 w-16" />
+                  <div key={i} style={timeBlockStyle}>
+                    <div
+                      style={{
+                        height: "2rem",
+                        width: "2rem",
+                        borderRadius: "50%",
+                        backgroundColor: "#e2e8f0",
+                      }}
+                    />
+                    <div
+                      style={{
+                        height: "1rem",
+                        width: "5rem",
+                        backgroundColor: "#e2e8f0",
+                      }}
+                    />
+                    <div
+                      style={{
+                        height: "1rem",
+                        width: "4rem",
+                        backgroundColor: "#e2e8f0",
+                      }}
+                    />
                   </div>
                 ))
             : prayerTimes.map((prayer) => (
                 <div
                   key={prayer.name}
-                  className="flex items-center justify-between rounded-lg bg-muted p-4"
+                  style={{ ...timeBlockStyle, backgroundColor: "#f1f5f9" }}
                 >
-                  <div className="flex items-center space-x-4">
-                    <prayer.icon className="h-8 w-8" />
-                    <span className="font-medium">{prayer.name}</span>
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    {prayer.time}
-                  </span>
+                  <prayer.icon className="h-8 w-8" />
+                  <span style={labelStyle}>{prayer.name}</span>
+                  <span style={timeStyle}>{prayer.time}</span>
                 </div>
               ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div style={baseCardStyle}>
+      <div style={timeBlockStyle}>
+        <span style={labelStyle}>Prayer Times</span>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            fontSize: "0.875rem",
+            fontWeight: 400,
+          }}
+        >
+          <Clock className="mr-2 h-4 w-4" />
+          {currentTime.toLocaleTimeString()}
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        {isLoading
+          ? Array(5)
+              .fill(0)
+              .map((_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                    }}
+                  >
+                    <div
+                      style={{
+                        height: "2rem",
+                        width: "2rem",
+                        borderRadius: "50%",
+                        backgroundColor: "#e2e8f0",
+                      }}
+                    />
+                    <div
+                      style={{
+                        height: "1rem",
+                        width: "5rem",
+                        backgroundColor: "#e2e8f0",
+                      }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      height: "1rem",
+                      width: "4rem",
+                      backgroundColor: "#e2e8f0",
+                    }}
+                  />
+                </div>
+              ))
+          : prayerTimes.map((prayer) => (
+              <div
+                key={prayer.name}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  backgroundColor: "#f1f5f9",
+                  padding: "1rem",
+                  borderRadius: "0.5rem",
+                }}
+              >
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+                >
+                  <prayer.icon className="h-8 w-8" />
+                  <span style={labelStyle}>{prayer.name}</span>
+                </div>
+                <span style={timeStyle}>{prayer.time}</span>
+              </div>
+            ))}
+      </div>
+    </div>
   );
-}
+};

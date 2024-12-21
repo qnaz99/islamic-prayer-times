@@ -79,16 +79,3 @@ Key Features:
   ```sh
   yarn install
   ```
-
-### Installation
-
-```bash
-npm install react-islamic-prayer-times
-```
-
-Import the component and its styles:
-
-```jsx
-import { PrayerTimes } from "react-islamic-prayer-times";
-import "react-islamic-prayer-times/styles.css";
-```
