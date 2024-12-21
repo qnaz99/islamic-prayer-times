@@ -11,7 +11,6 @@ interface LocationConfig {
     method?: number;
 }
 interface PrayerTimesProps$1 {
-    layout?: "horizontal" | "vertical";
     minimized?: boolean;
     showNextOnly?: boolean;
     styles?: {
@@ -28,7 +27,7 @@ interface PrayerTimesProps$1 {
     showJumuah?: boolean;
     showSunrise?: boolean;
 }
-declare const PrayerTimesDisplay: ({ layout, minimized, showNextOnly, styles, location: initialLocation, showSettings, showJumuah, showSunrise, }: PrayerTimesProps$1) => react_jsx_runtime.JSX.Element | null;
+declare const PrayerTimesDisplay: ({ minimized, showNextOnly, styles, location: initialLocation, showSettings, showJumuah, showSunrise, }: PrayerTimesProps$1) => react_jsx_runtime.JSX.Element | null;
 
 interface PrayerTimesProps {
     layout?: "horizontal" | "vertical";

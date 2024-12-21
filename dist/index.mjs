@@ -2513,7 +2513,7 @@ function cn(...inputs) {
 // src/components/prayer-times.tsx
 import { Clock, Moon, Sun, Sunrise, Sunset } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
+import { jsx, jsxs } from "react/jsx-runtime";
 var calculationMethods = [
   { label: "Jafari", value: 0 },
   { label: "University of Islamic Sciences, Karachi", value: 1 },
@@ -2627,7 +2627,6 @@ var PrayerTimesSkeleton = ({ minimized = false }) => /* @__PURE__ */ jsxs("div",
   )
 ] });
 var PrayerTimesDisplay = ({
-  layout = "horizontal",
   minimized = false,
   showNextOnly = false,
   styles = {},
@@ -2842,8 +2841,8 @@ var PrayerTimesDisplay = ({
         "div",
         {
           className: cn(
-            layout === "vertical" ? "space-y-4" : "grid gap-4",
-            layout === "horizontal" && (minimized || showNextOnly ? "grid-cols-1" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5")
+            "grid gap-4",
+            minimized || showNextOnly ? "grid-cols-1" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
           ),
           style: styles.timeBlockContainer,
           children: showNextOnly ? (() => {
@@ -2871,28 +2870,12 @@ var PrayerTimesDisplay = ({
               },
               nextPrayer.name
             );
-          })() : prayerTimes.map(({ name, time, icon }) => /* @__PURE__ */ jsx(
+          })() : prayerTimes.map(({ name, time, icon }) => /* @__PURE__ */ jsxs(
             "div",
             {
-              className: cn(
-                "rounded-lg bg-muted p-4",
-                layout === "vertical" ? "flex items-center justify-between" : "flex flex-col items-center space-y-2"
-              ),
+              className: "flex flex-col items-center space-y-2 rounded-lg bg-muted p-4",
               style: styles.timeBlock,
-              children: layout === "vertical" ? /* @__PURE__ */ jsxs(Fragment, { children: [
-                /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
-                  React.createElement(icon, { size: 24 }),
-                  /* @__PURE__ */ jsx("h3", { className: "font-medium", children: name })
-                ] }),
-                /* @__PURE__ */ jsx(
-                  "p",
-                  {
-                    className: "text-sm text-muted-foreground",
-                    style: styles.time,
-                    children: time
-                  }
-                )
-              ] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+              children: [
                 React.createElement(icon, {
                   size: 24,
                   className: "mb-2"
@@ -2906,7 +2889,7 @@ var PrayerTimesDisplay = ({
                     children: time
                   }
                 )
-              ] })
+              ]
             },
             name
           ))
