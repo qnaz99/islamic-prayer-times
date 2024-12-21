@@ -81,7 +81,6 @@ const CardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
 ));
-
 // Skeleton Component
 const Skeleton = ({
   className,
@@ -92,7 +91,6 @@ const Skeleton = ({
     {...props}
   />
 );
-
 // Main PrayerTimes Component
 export const PrayerTimes: React.FC<PrayerTimesProps> = ({
   layout = "horizontal",
