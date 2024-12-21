@@ -4,84 +4,127 @@
   <p align="center">
     A flexible and beautiful React component for displaying Islamic prayer times
     <br />
-    <a href="https://islamic-prayer-times-demo-bqg3d56k7-rbytes-projects.vercel.app/"><strong>View Demo »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/yourusername/react-prayer-times/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/yourusername/react-prayer-times/issues">Request Feature</a>
+    <a href="https://islamic-prayer-times-demo.vercel.app/"><strong>View Demo »</strong></a>
   </p>
 </div>
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#props">Props</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-<!-- ABOUT THE PROJECT -->
-
 ## About The Project
 
-[![React Prayer Times Screen Shot][product-screenshot]](/public/screenshot.png)
+A modern React component for displaying Islamic prayer times with support for both horizontal and vertical layouts.
 
-React Prayer Times is a modern, flexible React component that displays Islamic prayer times with multiple layout options. It uses the Aladhan API to fetch accurate prayer times based on location and provides both horizontal and vertical layout options.
+### Horizontal Layout
 
-Key Features:
+![Horizontal Layout](screenshot.png)
 
-- Multiple layout options (horizontal/vertical)
-- Real-time updates
-- Customizable styling
-- Automatic timezone detection
-- Loading states and error handling
-- Accessibility support
+### Vertical Layout
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+![Vertical Layout](screenshot.png)
 
-### Built With
+## Features
 
-- [![React][React.js]]["https://www.letsreact.org"]
-- [![NextJS][Next.js]]["https://nextjs.org"]
-- [![TypeScript][TypeScript]][https://www.typescriptlang.org]
-- [![TailwindCSS][TailwindCSS]][https://tailwindcss.com]
-- [Aladhan API](https://aladhan.com/prayer-times-api)
+- 🎨 Two layout options: Horizontal and Vertical
+- 🌍 Automatic location detection
+- ⚡ Real-time updates
+- 🎯 Precise prayer times using Aladhan API
+- 🔄 Automatic timezone handling
+- 📱 Responsive design
+- ♿ Accessibility support
+- 💅 Customizable styling
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- GETTING STARTED -->
-
-## Getting Started
-
-### Prerequisites
-
-- npm
-  ```sh
-  yarn install
-  ```
-
-### Installation
+## Installation
 
 ```bash
-yarn add react-islamic-prayer-times
+npm install react-prayer-times
+# or
+yarn add react-prayer-times
 ```
+
+## Usage
+
+### Basic Usage
+
+```jsx
+import PrayerTimes from "react-prayer-times";
+
+// Horizontal Layout (default)
+function App() {
+  return <PrayerTimes />;
+}
+
+// Vertical Layout
+function App() {
+  return <PrayerTimes layout="vertical" />;
+}
+```
+
+### With Custom Location
+
+```jsx
+<PrayerTimes
+  location={{
+    city: "London",
+    country: "UK",
+    method: 2, // ISNA method
+    school: 0, // Shafi school
+  }}
+/>
+```
+
+### With Custom Styles
+
+```jsx
+<PrayerTimes
+  styles={{
+    container: {
+      backgroundColor: "#f8f9fa",
+      borderRadius: "12px",
+      padding: "20px",
+    },
+    timeBlock: {
+      backgroundColor: "#e9ecef",
+      borderRadius: "8px",
+    },
+    time: {
+      color: "#2c3e50",
+      fontWeight: "bold",
+    },
+  }}
+/>
+```
+
+## Props
+
+| Prop           | Type                           | Default        | Description         |
+| -------------- | ------------------------------ | -------------- | ------------------- |
+| `layout`       | `'horizontal'` \| `'vertical'` | `'horizontal'` | Layout style        |
+| `styles`       | `object`                       | `{}`           | Custom styles       |
+| `location`     | `object`                       | `{}`           | Location config     |
+| `showSettings` | `boolean`                      | `false`        | Show settings panel |
+
+### Location Configuration
+
+```typescript
+interface LocationConfig {
+  address?: string;
+  city?: string;
+  country?: string;
+  state?: string;
+  school?: number; // 0: Shafi, 1: Hanafi
+  method?: number; // Calculation method (0-23)
+}
+```
+
+## Built With
+
+- React
+- TypeScript
+- [Aladhan API](https://aladhan.com/prayer-times-api)
+
+## License
+
+MIT © [Your Name]
+
+## Acknowledgments
+
+- [Aladhan API](https://aladhan.com/prayer-times-api) for providing prayer times data
+- [React Icons](https://react-icons.github.io/react-icons/) for the prayer time icons

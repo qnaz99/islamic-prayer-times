@@ -67,6 +67,203 @@ var cva = (base, config) => (props) => {
   return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
 };
 
+// src/components/prayer-times.tsx
+import React, { useState } from "react";
+import { jsx, jsxs } from "react/jsx-runtime";
+var cn = (...classes) => classes.filter(Boolean).join(" ");
+var alertVariants = cva(
+  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
+  {
+    variants: {
+      variant: {
+        default: "bg-white text-gray-900 border-gray-200",
+        destructive: "border-red-500/50 text-red-600 dark:border-red-500"
+      }
+    },
+    defaultVariants: {
+      variant: "default"
+    }
+  }
+);
+var Alert = React.forwardRef((_a, ref) => {
+  var _b = _a, { className, variant = "default" } = _b, props = __objRest(_b, ["className", "variant"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      role: "alert",
+      className: cn(alertVariants({ variant }), className)
+    }, props)
+  );
+});
+var Card = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn(
+        "rounded-xl border border-gray-200 bg-white text-gray-900 shadow",
+        className
+      )
+    }, props)
+  );
+});
+var CardHeader = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn("flex flex-col space-y-1.5 p-6", className)
+    }, props)
+  );
+});
+var CardTitle = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx(
+    "div",
+    __spreadValues({
+      ref,
+      className: cn("font-semibold leading-none tracking-tight", className)
+    }, props)
+  );
+});
+var CardContent = React.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  return /* @__PURE__ */ jsx("div", __spreadValues({ ref, className: cn("p-6 pt-0", className) }, props));
+});
+var CalculationMethod = /* @__PURE__ */ ((CalculationMethod2) => {
+  CalculationMethod2[CalculationMethod2["Jafari"] = 0] = "Jafari";
+  CalculationMethod2[CalculationMethod2["Karachi"] = 1] = "Karachi";
+  CalculationMethod2[CalculationMethod2["ISNA"] = 2] = "ISNA";
+  CalculationMethod2[CalculationMethod2["MWL"] = 3] = "MWL";
+  CalculationMethod2[CalculationMethod2["Makkah"] = 4] = "Makkah";
+  CalculationMethod2[CalculationMethod2["Egypt"] = 5] = "Egypt";
+  CalculationMethod2[CalculationMethod2["Tehran"] = 7] = "Tehran";
+  CalculationMethod2[CalculationMethod2["Gulf"] = 8] = "Gulf";
+  CalculationMethod2[CalculationMethod2["Kuwait"] = 9] = "Kuwait";
+  CalculationMethod2[CalculationMethod2["Qatar"] = 10] = "Qatar";
+  CalculationMethod2[CalculationMethod2["Singapore"] = 11] = "Singapore";
+  CalculationMethod2[CalculationMethod2["France"] = 12] = "France";
+  CalculationMethod2[CalculationMethod2["Turkey"] = 13] = "Turkey";
+  CalculationMethod2[CalculationMethod2["Russia"] = 14] = "Russia";
+  CalculationMethod2[CalculationMethod2["Moonsighting"] = 15] = "Moonsighting";
+  CalculationMethod2[CalculationMethod2["Dubai"] = 16] = "Dubai";
+  CalculationMethod2[CalculationMethod2["Malaysia"] = 17] = "Malaysia";
+  CalculationMethod2[CalculationMethod2["Tunisia"] = 18] = "Tunisia";
+  CalculationMethod2[CalculationMethod2["Algeria"] = 19] = "Algeria";
+  CalculationMethod2[CalculationMethod2["Indonesia"] = 20] = "Indonesia";
+  CalculationMethod2[CalculationMethod2["Morocco"] = 21] = "Morocco";
+  CalculationMethod2[CalculationMethod2["Portugal"] = 22] = "Portugal";
+  CalculationMethod2[CalculationMethod2["Jordan"] = 23] = "Jordan";
+  CalculationMethod2[CalculationMethod2["Custom"] = 99] = "Custom";
+  return CalculationMethod2;
+})(CalculationMethod || {});
+var School = /* @__PURE__ */ ((School2) => {
+  School2[School2["Shafi"] = 0] = "Shafi";
+  School2[School2["Hanafi"] = 1] = "Hanafi";
+  return School2;
+})(School || {});
+var PrayerTimes = ({
+  minimized = false,
+  styles = {},
+  location: initialLocation,
+  showSettings = false
+}) => {
+  const [location, setLocation] = useState(
+    initialLocation || {}
+  );
+  const [prayerData, setPrayerData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const calculationMethods = Object.entries(CalculationMethod).filter(([key]) => isNaN(Number(key))).map(([key, value]) => ({
+    label: key.replace(/([A-Z])/g, " $1").trim(),
+    // Add spaces before capital letters
+    value
+  }));
+  const schools = Object.entries(School).filter(([key]) => isNaN(Number(key))).map(([key, value]) => ({
+    label: key,
+    value
+  }));
+  const Settings = () => /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: "settings-panel",
+      style: {
+        marginBottom: "1rem",
+        padding: "1rem",
+        backgroundColor: "#f8f9fa",
+        borderRadius: "8px"
+      },
+      children: [
+        /* @__PURE__ */ jsx("div", { className: "setting-group", style: { marginBottom: "1rem" }, children: /* @__PURE__ */ jsxs("label", { style: { display: "block", marginBottom: "0.5rem" }, children: [
+          "Calculation Method:",
+          /* @__PURE__ */ jsxs(
+            "select",
+            {
+              value: location.method,
+              onChange: (e) => setLocation((prev) => __spreadProps(__spreadValues({}, prev), {
+                method: Number(e.target.value)
+              })),
+              style: __spreadValues({
+                width: "100%",
+                padding: "0.5rem",
+                borderRadius: "4px",
+                border: "1px solid #ddd"
+              }, styles.select),
+              children: [
+                /* @__PURE__ */ jsx("option", { value: "", children: "Select Method" }),
+                calculationMethods.map(({ label, value }) => /* @__PURE__ */ jsx("option", { value, children: label }, value))
+              ]
+            }
+          )
+        ] }) }),
+        /* @__PURE__ */ jsx("div", { className: "setting-group", children: /* @__PURE__ */ jsxs("label", { style: { display: "block", marginBottom: "0.5rem" }, children: [
+          "School:",
+          /* @__PURE__ */ jsx(
+            "select",
+            {
+              value: location.school,
+              onChange: (e) => setLocation((prev) => __spreadProps(__spreadValues({}, prev), {
+                school: Number(e.target.value)
+              })),
+              style: __spreadValues({
+                width: "100%",
+                padding: "0.5rem",
+                borderRadius: "4px",
+                border: "1px solid #ddd"
+              }, styles.select),
+              children: schools.map(({ label, value }) => /* @__PURE__ */ jsx("option", { value, children: label }, value))
+            }
+          )
+        ] }) })
+      ]
+    }
+  );
+  return /* @__PURE__ */ jsxs("div", { style: styles.container, children: [
+    /* @__PURE__ */ jsx("h2", { style: styles.header, children: "Prayer Times" }),
+    showSettings && /* @__PURE__ */ jsx(Settings, {}),
+    /* @__PURE__ */ jsx(
+      "div",
+      {
+        style: {
+          display: "grid",
+          gridTemplateColumns: minimized ? "1fr" : "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "1rem"
+        }
+      }
+    )
+  ] });
+};
+
+// lib/utils.ts
+import { clsx as clsx2 } from "clsx";
+import { twMerge } from "tailwind-merge";
+function cn2(...inputs) {
+  return twMerge(clsx2(inputs));
+}
+
 // node_modules/lucide-react/dist/esm/createLucideIcon.js
 import { forwardRef as forwardRef2, createElement as createElement2 } from "react";
 
@@ -147,19 +344,6 @@ var createLucideIcon = (iconName, iconNode) => {
   return Component;
 };
 
-// node_modules/lucide-react/dist/esm/icons/circle-alert.js
-var CircleAlert = createLucideIcon("CircleAlert", [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["line", { x1: "12", x2: "12", y1: "8", y2: "12", key: "1pkeuh" }],
-  ["line", { x1: "12", x2: "12.01", y1: "16", y2: "16", key: "4dfq90" }]
-]);
-
-// node_modules/lucide-react/dist/esm/icons/clock.js
-var Clock = createLucideIcon("Clock", [
-  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-  ["polyline", { points: "12 6 12 12 16 14", key: "68esgv" }]
-]);
-
 // node_modules/lucide-react/dist/esm/icons/moon.js
 var Moon = createLucideIcon("Moon", [
   ["path", { d: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z", key: "a7tn18" }]
@@ -202,15 +386,12 @@ var Sunset = createLucideIcon("Sunset", [
   ["path", { d: "M16 18a4 4 0 0 0-8 0", key: "1lzouq" }]
 ]);
 
-// src/components/prayer-times.tsx
-import React, { useEffect as useEffect2, useState as useState2 } from "react";
-
 // hooks/use-prayer-times.ts
-import { useEffect, useState } from "react";
+import { useEffect, useState as useState2 } from "react";
 function usePrayerTimes(latitude, longitude) {
-  const [prayerTimes, setPrayerTimes] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [prayerTimes, setPrayerTimes] = useState2([]);
+  const [isLoading, setIsLoading] = useState2(true);
+  const [error, setError] = useState2(null);
   useEffect(() => {
     async function fetchPrayerTimes() {
       try {
@@ -245,197 +426,6 @@ function usePrayerTimes(latitude, longitude) {
   }, [latitude, longitude]);
   return { prayerTimes, isLoading, error };
 }
-
-// src/components/prayer-times.tsx
-import { jsx, jsxs } from "react/jsx-runtime";
-var cn = (...classes) => classes.filter(Boolean).join(" ");
-var alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
-  {
-    variants: {
-      variant: {
-        default: "bg-white text-gray-900 border-gray-200",
-        destructive: "border-red-500/50 text-red-600 dark:border-red-500"
-      }
-    },
-    defaultVariants: {
-      variant: "default"
-    }
-  }
-);
-var Alert = React.forwardRef((_a, ref) => {
-  var _b = _a, { className, variant = "default" } = _b, props = __objRest(_b, ["className", "variant"]);
-  return /* @__PURE__ */ jsx(
-    "div",
-    __spreadValues({
-      ref,
-      role: "alert",
-      className: cn(alertVariants({ variant }), className)
-    }, props)
-  );
-});
-var Card = React.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx(
-    "div",
-    __spreadValues({
-      ref,
-      className: cn(
-        "rounded-xl border border-gray-200 bg-white text-gray-900 shadow",
-        className
-      )
-    }, props)
-  );
-});
-var CardHeader = React.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx(
-    "div",
-    __spreadValues({
-      ref,
-      className: cn("flex flex-col space-y-1.5 p-6", className)
-    }, props)
-  );
-});
-var CardTitle = React.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx(
-    "div",
-    __spreadValues({
-      ref,
-      className: cn("font-semibold leading-none tracking-tight", className)
-    }, props)
-  );
-});
-var CardContent = React.forwardRef((_a, ref) => {
-  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx("div", __spreadValues({ ref, className: cn("p-6 pt-0", className) }, props));
-});
-var Skeleton = (_a) => {
-  var _b = _a, {
-    className
-  } = _b, props = __objRest(_b, [
-    "className"
-  ]);
-  return /* @__PURE__ */ jsx(
-    "div",
-    __spreadValues({
-      className: cn("animate-pulse rounded-md bg-gray-200", className)
-    }, props)
-  );
-};
-var PrayerTimes = ({
-  layout = "horizontal",
-  latitude,
-  longitude,
-  className,
-  minimized = false
-}) => {
-  const { prayerTimes, isLoading, error } = usePrayerTimes(latitude, longitude);
-  const [currentTime, setCurrentTime] = useState2(/* @__PURE__ */ new Date());
-  useEffect2(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(/* @__PURE__ */ new Date());
-    }, 6e4);
-    return () => clearInterval(timer);
-  }, []);
-  const getNextPrayer = () => {
-    if (!(prayerTimes == null ? void 0 : prayerTimes.length)) return null;
-    const now = currentTime;
-    const currentTimeStr = now.toLocaleTimeString("en-US", { hour12: false });
-    return prayerTimes.find((prayer) => prayer.time > currentTimeStr) || prayerTimes[0];
-  };
-  if (error) {
-    return /* @__PURE__ */ jsxs(Alert, { variant: "destructive", children: [
-      /* @__PURE__ */ jsx(CircleAlert, { className: "h-4 w-4" }),
-      /* @__PURE__ */ jsx("div", { children: error })
-    ] });
-  }
-  if (minimized) {
-    const nextPrayer = getNextPrayer();
-    return /* @__PURE__ */ jsx(Card, { className: cn("w-full", className), children: /* @__PURE__ */ jsx(CardContent, { className: "p-4", children: isLoading ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
-        /* @__PURE__ */ jsx(Skeleton, { className: "h-8 w-8 rounded-full" }),
-        /* @__PURE__ */ jsx(Skeleton, { className: "h-4 w-20" })
-      ] }),
-      /* @__PURE__ */ jsx(Skeleton, { className: "h-4 w-16" })
-    ] }) : nextPrayer && /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between rounded-lg bg-gray-50 p-4", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
-        /* @__PURE__ */ jsx(nextPrayer.icon, { className: "h-8 w-8" }),
-        /* @__PURE__ */ jsx("span", { className: "font-medium", children: nextPrayer.name })
-      ] }),
-      /* @__PURE__ */ jsx("span", { className: "text-sm text-gray-500", children: nextPrayer.time })
-    ] }) }) });
-  }
-  return /* @__PURE__ */ jsxs(Card, { className: cn("w-full", className), children: [
-    /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs(CardTitle, { className: "flex items-center justify-between", children: [
-      /* @__PURE__ */ jsx("span", { children: "Prayer Times" }),
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center text-sm font-normal", children: [
-        /* @__PURE__ */ jsx(Clock, { className: "mr-2 h-4 w-4" }),
-        currentTime.toLocaleTimeString()
-      ] })
-    ] }) }),
-    /* @__PURE__ */ jsx(CardContent, { children: /* @__PURE__ */ jsx(
-      "div",
-      {
-        className: layout === "horizontal" ? "grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5" : "space-y-4",
-        children: isLoading ? Array(5).fill(0).map(
-          (_, i) => layout === "horizontal" ? /* @__PURE__ */ jsxs(
-            "div",
-            {
-              className: "flex flex-col items-center space-y-2",
-              children: [
-                /* @__PURE__ */ jsx(Skeleton, { className: "h-8 w-8 rounded-full" }),
-                /* @__PURE__ */ jsx(Skeleton, { className: "h-4 w-20" }),
-                /* @__PURE__ */ jsx(Skeleton, { className: "h-4 w-16" })
-              ]
-            },
-            i
-          ) : /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
-              /* @__PURE__ */ jsx(Skeleton, { className: "h-8 w-8 rounded-full" }),
-              /* @__PURE__ */ jsx(Skeleton, { className: "h-4 w-20" })
-            ] }),
-            /* @__PURE__ */ jsx(Skeleton, { className: "h-4 w-16" })
-          ] }, i)
-        ) : prayerTimes.map(
-          (prayer) => layout === "horizontal" ? /* @__PURE__ */ jsxs(
-            "div",
-            {
-              className: "flex flex-col items-center space-y-2 rounded-lg bg-gray-50 p-4",
-              children: [
-                /* @__PURE__ */ jsx(prayer.icon, { className: "h-8 w-8" }),
-                /* @__PURE__ */ jsx("span", { className: "font-medium", children: prayer.name }),
-                /* @__PURE__ */ jsx("span", { className: "text-sm text-gray-500", children: prayer.time })
-              ]
-            },
-            prayer.name
-          ) : /* @__PURE__ */ jsxs(
-            "div",
-            {
-              className: "flex items-center justify-between rounded-lg bg-gray-50 p-4",
-              children: [
-                /* @__PURE__ */ jsxs("div", { className: "flex items-center space-x-4", children: [
-                  /* @__PURE__ */ jsx(prayer.icon, { className: "h-8 w-8" }),
-                  /* @__PURE__ */ jsx("span", { className: "font-medium", children: prayer.name })
-                ] }),
-                /* @__PURE__ */ jsx("span", { className: "text-sm text-gray-500", children: prayer.time })
-              ]
-            },
-            prayer.name
-          )
-        )
-      }
-    ) })
-  ] });
-};
-
-// lib/utils.ts
-import { clsx as clsx2 } from "clsx";
-import { twMerge } from "tailwind-merge";
-function cn2(...inputs) {
-  return twMerge(clsx2(inputs));
-}
 export {
   PrayerTimes,
   cn2 as cn,
@@ -468,22 +458,6 @@ lucide-react/dist/esm/Icon.js:
    *)
 
 lucide-react/dist/esm/createLucideIcon.js:
-  (**
-   * @license lucide-react v0.469.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
-lucide-react/dist/esm/icons/circle-alert.js:
-  (**
-   * @license lucide-react v0.469.0 - ISC
-   *
-   * This source code is licensed under the ISC license.
-   * See the LICENSE file in the root directory of this source tree.
-   *)
-
-lucide-react/dist/esm/icons/clock.js:
   (**
    * @license lucide-react v0.469.0 - ISC
    *

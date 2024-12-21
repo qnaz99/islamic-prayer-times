@@ -1,125 +1,27 @@
 "use client";
 
-import { cva } from "class-variance-authority";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-// Utility function to combine class names
-const cn = (...classes: (string | undefined)[]) =>
-  classes.filter(Boolean).join(" ");
+// Constants and types
+const calculationMethods = [
+  { label: "Jafari", value: 0 },
+  { label: "University of Islamic Sciences, Karachi", value: 1 },
+  { label: "Islamic Society of North America (ISNA)", value: 2 },
+  { label: "Muslim World League", value: 3 },
+  { label: "Umm Al-Qura University, Makkah", value: 4 },
+  { label: "Egyptian General Authority", value: 5 },
+  { label: "Institute of Geophysics, Tehran", value: 7 },
+  // TODO: add other methods as needed
+];
 
-// Alert Component
-const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
-  {
-    variants: {
-      variant: {
-        default: "bg-white text-gray-900 border-gray-200",
-        destructive: "border-red-500/50 text-red-600 dark:border-red-500",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-);
+const schools = [
+  { label: "Shafi", value: 0 },
+  { label: "Hanafi", value: 1 },
+];
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { variant?: "default" | "destructive" }
->(({ className, variant = "default", ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn(alertVariants({ variant }), className)}
-    {...props}
-  />
-));
-
-// Card Components
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-xl border border-gray-200 bg-white text-gray-900 shadow",
-      className
-    )}
-    {...props}
-  />
-));
-
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-));
-
-const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("font-semibold leading-none tracking-tight", className)}
-    {...props}
-  />
-));
-
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-));
-// Skeleton Component
-const Skeleton = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("animate-pulse rounded-md bg-gray-200", className)}
-    {...props}
-  />
-);
-
-// Add enums for better readability
-enum CalculationMethod {
-  Jafari = 0,
-  Karachi = 1,
-  ISNA = 2,
-  MWL = 3,
-  Makkah = 4,
-  Egypt = 5,
-  Tehran = 7,
-  Gulf = 8,
-  Kuwait = 9,
-  Qatar = 10,
-  Singapore = 11,
-  France = 12,
-  Turkey = 13,
-  Russia = 14,
-  Moonsighting = 15,
-  Dubai = 16,
-  Malaysia = 17,
-  Tunisia = 18,
-  Algeria = 19,
-  Indonesia = 20,
-  Morocco = 21,
-  Portugal = 22,
-  Jordan = 23,
-  Custom = 99,
-}
-
-enum School {
-  Shafi = 0,
-  Hanafi = 1,
+interface Coordinates {
+  latitude: number;
+  longitude: number;
 }
 
 interface LocationConfig {
@@ -127,16 +29,8 @@ interface LocationConfig {
   city?: string;
   country?: string;
   state?: string;
-  school?: School;
-  method?: CalculationMethod;
-  adjustments?: {
-    fajr?: number;
-    sunrise?: number;
-    dhuhr?: number;
-    asr?: number;
-    maghrib?: number;
-    isha?: number;
-  };
+  school?: number;
+  method?: number;
 }
 
 interface PrayerTimesProps {
@@ -152,36 +46,133 @@ interface PrayerTimesProps {
   showSettings?: boolean;
 }
 
-// Main PrayerTimes Component
-export const PrayerTimes: React.FC<PrayerTimesProps> = ({
+const PrayerTimes: React.FC<PrayerTimesProps> = ({
   minimized = false,
   styles = {},
-  location: initialLocation,
+  location: initialLocation = {},
   showSettings = false,
 }) => {
-  const [location, setLocation] = useState<LocationConfig>(
-    initialLocation || {}
-  );
+  const [location, setLocation] = useState(initialLocation);
+  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [prayerData, setPrayerData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Create arrays of calculation methods and schools for the select dropdowns
-  const calculationMethods = Object.entries(CalculationMethod)
-    .filter(([key]) => isNaN(Number(key)))
-    .map(([key, value]) => ({
-      label: key.replace(/([A-Z])/g, " $1").trim(), // Add spaces before capital letters
-      value: value,
-    }));
+  // Get coordinates from browser geolocation
+  const getCurrentPosition = (): Promise<Coordinates> => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error("Geolocation is not supported"));
+      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => reject(error)
+      );
+    });
+  };
 
-  const schools = Object.entries(School)
-    .filter(([key]) => isNaN(Number(key)))
-    .map(([key, value]) => ({
-      label: key,
-      value: value,
-    }));
+  // Get coordinates from address using Nominatim API
+  const getCoordinatesFromAddress = async (
+    address: string
+  ): Promise<Coordinates> => {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        address
+      )}`
+    );
+    const data = await response.json();
+    if (data && data[0]) {
+      return {
+        latitude: parseFloat(data[0].lat),
+        longitude: parseFloat(data[0].lon),
+      };
+    }
+    throw new Error("Address not found");
+  };
 
-  // Settings component
+  // Get coordinates from city/country using Nominatim API
+  const getCoordinatesFromCity = async (
+    city: string,
+    country: string,
+    state?: string
+  ): Promise<Coordinates> => {
+    const query = state
+      ? `${city}, ${state}, ${country}`
+      : `${city}, ${country}`;
+    return getCoordinatesFromAddress(query);
+  };
+
+  useEffect(() => {
+    const getCoordinates = async () => {
+      try {
+        let coords: Coordinates;
+
+        if (location.address) {
+          coords = await getCoordinatesFromAddress(location.address);
+        } else if (location.city && location.country) {
+          coords = await getCoordinatesFromCity(
+            location.city,
+            location.country,
+            location.state
+          );
+        } else {
+          coords = await getCurrentPosition();
+        }
+
+        setCoordinates(coords);
+      } catch (error) {
+        setError(
+          "Could not determine location. Please check your input or try again."
+        );
+        setLoading(false);
+      }
+    };
+
+    getCoordinates();
+  }, [location]);
+
+  useEffect(() => {
+    const fetchPrayerTimes = async () => {
+      if (!coordinates) return;
+
+      try {
+        const date = new Date();
+        const dateStr = `${date.getDate()}-${
+          date.getMonth() + 1
+        }-${date.getFullYear()}`;
+
+        const params = new URLSearchParams({
+          latitude: coordinates.latitude.toString(),
+          longitude: coordinates.longitude.toString(),
+          method: (location.method || 2).toString(), // Default to ISNA method
+          school: (location.school || 0).toString(), // Default to Shafi
+        });
+
+        const response = await fetch(
+          `https://api.aladhan.com/v1/timings/${dateStr}?${params}`
+        );
+        const data = await response.json();
+
+        if (data.code === 200) {
+          setPrayerData(data.data);
+        } else {
+          throw new Error("Failed to fetch prayer times");
+        }
+      } catch (error) {
+        setError("Failed to fetch prayer times. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrayerTimes();
+  }, [coordinates, location.method, location.school]);
+
   const Settings = () => (
     <div
       className="settings-panel"
@@ -196,7 +187,7 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({
         <label style={{ display: "block", marginBottom: "0.5rem" }}>
           Calculation Method:
           <select
-            value={location.method}
+            value={location.method || 2}
             onChange={(e) =>
               setLocation((prev) => ({
                 ...prev,
@@ -211,7 +202,6 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({
               ...styles.select,
             }}
           >
-            <option value="">Select Method</option>
             {calculationMethods.map(({ label, value }) => (
               <option key={value} value={value}>
                 {label}
@@ -225,7 +215,7 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({
         <label style={{ display: "block", marginBottom: "0.5rem" }}>
           School:
           <select
-            value={location.school}
+            value={location.school || 0}
             onChange={(e) =>
               setLocation((prev) => ({
                 ...prev,
@@ -251,8 +241,30 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({
     </div>
   );
 
+  const containerStyles: React.CSSProperties = {
+    padding: "20px",
+    borderRadius: "8px",
+    backgroundColor: "#fff",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    width: minimized ? "300px" : "100%",
+    ...styles.container,
+  };
+
+  if (loading) return <div>Loading prayer times...</div>;
+  if (error) return <div>{error}</div>;
+  if (!prayerData) return null;
+
+  const prayerTimes = [
+    { name: "Fajr", time: prayerData.timings.Fajr },
+    { name: "Sunrise", time: prayerData.timings.Sunrise },
+    { name: "Dhuhr", time: prayerData.timings.Dhuhr },
+    { name: "Asr", time: prayerData.timings.Asr },
+    { name: "Maghrib", time: prayerData.timings.Maghrib },
+    { name: "Isha", time: prayerData.timings.Isha },
+  ];
+
   return (
-    <div style={styles.container}>
+    <div style={containerStyles}>
       <h2 style={styles.header}>Prayer Times</h2>
 
       {showSettings && <Settings />}
@@ -266,8 +278,26 @@ export const PrayerTimes: React.FC<PrayerTimesProps> = ({
           gap: "1rem",
         }}
       >
-        {/* ... prayer times display ... */}
+        {prayerTimes.map(({ name, time }) => (
+          <div
+            key={name}
+            style={{
+              padding: "1rem",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "4px",
+              textAlign: "center",
+              ...styles.timeBlock,
+            }}
+          >
+            <h3 style={{ margin: "0 0 0.5rem 0" }}>{name}</h3>
+            <p style={{ margin: 0, fontSize: "1.2rem", ...styles.time }}>
+              {time}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
+
+export default PrayerTimes;
