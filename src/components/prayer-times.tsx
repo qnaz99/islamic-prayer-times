@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 // Constants and types
 const calculationMethods = [
@@ -59,7 +59,7 @@ function Skeleton({
   )
 }
 
-export { Skeleton };
+const PrayerTimesSkeleton = ({ minimized = false }) => (
   <div className="space-y-4 p-5">
     <Skeleton className="h-8 w-[150px]" />
     
