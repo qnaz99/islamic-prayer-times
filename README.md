@@ -4,7 +4,7 @@
   <p align="center">
     A flexible and beautiful React component for displaying Islamic prayer times
     <br />
-    <a href="#demo"><strong>View Demo »</strong></a>
+    <a href="https://islamic-prayer-times-demo-bqg3d56k7-rbytes-projects.vercel.app/"><strong>View Demo »</strong></a>
     <br />
     <br />
     <a href="https://github.com/yourusername/react-prayer-times/issues">Report Bug</a>
@@ -41,6 +41,7 @@
 </details>
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 [![React Prayer Times Screen Shot][product-screenshot]](/public/screenshot.png)
@@ -48,30 +49,33 @@
 React Prayer Times is a modern, flexible React component that displays Islamic prayer times with multiple layout options. It uses the Aladhan API to fetch accurate prayer times based on location and provides both horizontal and vertical layout options.
 
 Key Features:
-* Multiple layout options (horizontal/vertical)
-* Real-time updates
-* Customizable styling
-* Automatic timezone detection
-* Loading states and error handling
-* Accessibility support
+
+- Multiple layout options (horizontal/vertical)
+- Real-time updates
+- Customizable styling
+- Automatic timezone detection
+- Loading states and error handling
+- Accessibility support
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
-* [![React][React.js]]["https://www.letsreact.org"]
-* [![NextJS][Next.js]]["https://nextjs.org"]
-* [![TypeScript][TypeScript]][https://www.typescriptlang.org]
-* [![TailwindCSS][TailwindCSS]][https://tailwindcss.com]
-* [Aladhan API](https://aladhan.com/prayer-times-api)
+- [![React][React.js]]["https://www.letsreact.org"]
+- [![NextJS][Next.js]]["https://nextjs.org"]
+- [![TypeScript][TypeScript]][https://www.typescriptlang.org]
+- [![TailwindCSS][TailwindCSS]][https://tailwindcss.com]
+- [Aladhan API](https://aladhan.com/prayer-times-api)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 ### Prerequisites
 
-* npm
+- npm
   ```sh
   yarn install
+  ```
