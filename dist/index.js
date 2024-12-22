@@ -2838,8 +2838,7 @@ var PrayerTimesDisplay = ({
   const prayerTimes = [
     { name: "Fajr", time: prayerData.timings.Fajr, icon: import_lucide_react.Moon },
     ...showSunrise ? [{ name: "Sunrise", time: prayerData.timings.Sunrise, icon: import_lucide_react.Sunrise }] : [],
-    { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: import_lucide_react.Sun },
-    ...showJumuah && currentTime.getDay() === 5 ? [{ name: "Jumu'ah", time: "13:00", icon: import_lucide_react.Sun }] : [],
+    ...showJumuah && currentTime.getDay() === 5 ? [{ name: "Jumu'ah", time: prayerData.timings.Dhuhr, icon: import_lucide_react.Sun }] : [{ name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: import_lucide_react.Sun }],
     { name: "Asr", time: prayerData.timings.Asr, icon: import_lucide_react.Sun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: import_lucide_react.Sunset },
     { name: "Isha", time: prayerData.timings.Isha, icon: import_lucide_react.Moon }
