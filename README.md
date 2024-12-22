@@ -122,7 +122,6 @@ function App() {
 
 ```jsx
 <PrayerTimesDisplay
-  layout="horizontal"
   minimized={false}
   showNextOnly={false}
   showSettings={true}
@@ -149,7 +148,6 @@ function App() {
 
 | Prop           | Type                           | Default        | Description               |
 | -------------- | ------------------------------ | -------------- | ------------------------- |
-| `layout`       | `'horizontal'` \| `'vertical'` | `'horizontal'` | Layout style              |
 | `minimized`    | `boolean`                      | `false`        | Enable minimized view     |
 | `showNextOnly` | `boolean`                      | `false`        | Show only the next prayer |
 | `styles`       | `object`                       | `{}`           | Custom styles             |

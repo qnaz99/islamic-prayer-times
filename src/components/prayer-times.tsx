@@ -42,7 +42,6 @@ interface LocationConfig {
 }
 
 interface PrayerTimesProps {
-  layout?: "horizontal" | "vertical";
   minimized?: boolean;
   showNextOnly?: boolean;
   styles?: {
@@ -164,7 +163,6 @@ const PrayerTimesSkeleton = ({ minimized = false }) => (
 );
 
 export const PrayerTimesDisplay = ({
-  layout = "horizontal",
   minimized = false,
   showNextOnly = false,
   styles = {},
@@ -436,11 +434,10 @@ export const PrayerTimesDisplay = ({
 
         <div
           className={cn(
-            layout === "vertical" ? "space-y-4" : "grid gap-4",
-            layout === "horizontal" &&
-              (minimized || showNextOnly
-                ? "grid-cols-1"
-                : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5")
+            "grid gap-4",
+            minimized || showNextOnly
+              ? "grid-cols-1"
+              : "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
           )}
           style={styles.timeBlockContainer}
         >
@@ -470,42 +467,20 @@ export const PrayerTimesDisplay = ({
             : prayerTimes.map(({ name, time, icon }) => (
                 <div
                   key={name}
-                  className={cn(
-                    "rounded-lg bg-muted p-4",
-                    layout === "vertical"
-                      ? "flex items-center justify-between"
-                      : "flex flex-col items-center space-y-2"
-                  )}
+                  className="flex flex-col items-center space-y-2 rounded-lg bg-muted p-4"
                   style={styles.timeBlock}
                 >
-                  {layout === "vertical" ? (
-                    <>
-                      <div className="flex items-center space-x-4">
-                        {React.createElement(icon, { size: 24 })}
-                        <h3 className="font-medium">{name}</h3>
-                      </div>
-                      <p
-                        className="text-sm text-muted-foreground"
-                        style={styles.time}
-                      >
-                        {time}
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      {React.createElement(icon, {
-                        size: 24,
-                        className: "mb-2",
-                      })}
-                      <h3 className="font-medium">{name}</h3>
-                      <p
-                        className="text-sm text-muted-foreground"
-                        style={styles.time}
-                      >
-                        {time}
-                      </p>
-                    </>
-                  )}
+                  {React.createElement(icon, {
+                    size: 24,
+                    className: "mb-2",
+                  })}
+                  <h3 className="font-medium">{name}</h3>
+                  <p
+                    className="text-sm text-muted-foreground"
+                    style={styles.time}
+                  >
+                    {time}
+                  </p>
                 </div>
               ))}
         </div>
