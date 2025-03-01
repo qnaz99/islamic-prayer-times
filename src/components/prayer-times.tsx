@@ -390,7 +390,7 @@ export const PrayerTimesDisplay = ({
     ...(showSunrise
       ? [{ name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise }]
       : []),
-    { name: "Jumuah", time: prayerData.timings.Sunrise, icon: Sun },
+    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: Sun },
     { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: Sun },
     { name: "Asr", time: prayerData.timings.Asr, icon: Sun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: Sunset },
