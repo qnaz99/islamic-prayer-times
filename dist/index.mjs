@@ -2804,11 +2804,11 @@ var PrayerTimesDisplay = ({
   const prayerTimes = [
     { name: "Fajr", time: prayerData.timings.Fajr, icon: Moon },
     ...showSunrise ? [{ name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise }] : [],
-    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: Sun },
     { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: Sun },
     { name: "Asr", time: prayerData.timings.Asr, icon: Sun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: Sunset },
-    { name: "Isha", time: prayerData.timings.Isha, icon: Moon }
+    { name: "Isha", time: prayerData.timings.Isha, icon: Moon },
+    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: Sun },
   ];
   const getNextPrayer = (prayerTimes2) => {
     const now = /* @__PURE__ */ new Date();
