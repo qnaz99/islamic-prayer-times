@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Clock, Moon, Sun, Sunrise, Sunset } from "lucide-react";
+import { Clock, Moon, Sun, Sunrise, Sunset, CloudSun, Users, MoonStar } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 // Constants and types
@@ -390,11 +390,11 @@ export const PrayerTimesDisplay = ({
     ...(showSunrise
       ? [{ name: "Sunrise", time: prayerData.timings.Sunrise, icon: Sunrise }]
       : []),
-    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: Sun },
     { name: "Dhuhr", time: prayerData.timings.Dhuhr, icon: Sun },
-    { name: "Asr", time: prayerData.timings.Asr, icon: Sun },
+    { name: "Asr", time: prayerData.timings.Asr, icon: CloudSun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: Sunset },
-    { name: "Isha", time: prayerData.timings.Isha, icon: Moon },
+    { name: "Isha", time: prayerData.timings.Isha, icon: MoonStar },
+    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: Users },
   ];
 
   const getNextPrayer = (
@@ -429,10 +429,10 @@ export const PrayerTimesDisplay = ({
           </div>
         </CardTitle>
       </CardHeader>
-
+  
       <CardContent>
         {showSettings && <Settings />}
-
+  
         <div
           className={cn(
             layout === "vertical" ? "space-y-4" : "grid gap-4",
@@ -466,49 +466,60 @@ export const PrayerTimesDisplay = ({
                   </div>
                 );
               })()
-            : prayerTimes.map(({ name, time, icon }) => (
-                <div
-                  key={name}
-                  className={cn(
-                    "rounded-lg bg-muted p-4",
-                    layout === "vertical"
-                      ? "flex items-center justify-between"
-                      : "flex flex-col items-center space-y-2"
-                  )}
-                  style={styles.timeBlock}
-                >
-                  {layout === "vertical" ? (
-                    <>
-                      <div className="flex items-center space-x-4">
-                        {React.createElement(icon, { size: 24 })}
+            : prayerTimes.map(({ name, time, icon }, index) => {
+                const isLastOdd =
+                  prayerTimes.length % 2 !== 0 && index === prayerTimes.length - 1;
+  
+                return (
+                  <div
+                    key={name}
+                    className={cn(
+                      "rounded-lg bg-muted p-4",
+                      layout === "vertical"
+                        ? "flex items-center justify-between"
+                        : "flex flex-col items-center space-y-2",
+                      isLastOdd ? "col-span-2 justify-self-center" : "" // Center last item if odd
+                    )}
+                    style={{
+                      ...styles.timeBlock,
+                      gridColumn: isLastOdd ? "span 2" : "auto", // Apply dynamic centering
+                      textAlign: isLastOdd ? "center" : "inherit",
+                    }}
+                  >
+                    {layout === "vertical" ? (
+                      <>
+                        <div className="flex items-center space-x-4">
+                          {React.createElement(icon, { size: 24 })}
+                          <h3 className="font-medium">{name}</h3>
+                        </div>
+                        <p
+                          className="text-sm text-muted-foreground"
+                          style={styles.time}
+                        >
+                          {time}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        {React.createElement(icon, {
+                          size: 24,
+                          className: "mb-2",
+                        })}
                         <h3 className="font-medium">{name}</h3>
-                      </div>
-                      <p
-                        className="text-sm text-muted-foreground"
-                        style={styles.time}
-                      >
-                        {time}
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      {React.createElement(icon, {
-                        size: 24,
-                        className: "mb-2",
-                      })}
-                      <h3 className="font-medium">{name}</h3>
-                      <p
-                        className="text-sm text-muted-foreground"
-                        style={styles.time}
-                      >
-                        {time}
-                      </p>
-                    </>
-                  )}
-                </div>
-              ))}
+                        <p
+                          className="text-sm text-muted-foreground"
+                          style={styles.time}
+                        >
+                          {time}
+                        </p>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
         </div>
       </CardContent>
     </Card>
   );
+  
 };
