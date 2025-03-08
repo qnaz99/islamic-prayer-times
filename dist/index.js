@@ -370,7 +370,8 @@ var PrayerTimesDisplay = ({
     { name: "Asr", time: prayerData.timings.Asr, icon: import_lucide_react.CloudSun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: import_lucide_react.Sunset },
     { name: "Isha", time: prayerData.timings.Isha, icon: import_lucide_react.MoonStar },
-    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: import_lucide_react.Users }
+    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: import_lucide_react.Users },
+    { name: "Taraweeh", time: prayerData.timings.Taraweeh, icon: import_lucide_react.Users }
   ];
   const getNextPrayer = (prayerTimes2) => {
     const now = /* @__PURE__ */ new Date();

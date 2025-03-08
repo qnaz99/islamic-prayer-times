@@ -335,7 +335,8 @@ var PrayerTimesDisplay = ({
     { name: "Asr", time: prayerData.timings.Asr, icon: CloudSun },
     { name: "Maghrib", time: prayerData.timings.Maghrib, icon: Sunset },
     { name: "Isha", time: prayerData.timings.Isha, icon: MoonStar },
-    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: Users }
+    { name: "Jumuah", time: prayerData.timings.Jumuah, icon: Users },
+    { name: "Taraweeh", time: prayerData.timings.Taraweeh, icon: Users }
   ];
   const getNextPrayer = (prayerTimes2) => {
     const now = /* @__PURE__ */ new Date();
