@@ -1,3 +1,10 @@
+## Build Command:
+
+npm run build:package
+
+
+
+
 <div align="center">
   <h1>React Prayer Times</h1>
   
